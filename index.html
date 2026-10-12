@@ -3,278 +3,307 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>WikiCards Official</title>
+    <title>WikiMaster Solo</title>
     <style>
         :root {
-            --c-common: #8e9eab;
-            --c-uncommon: #2ecc71;
-            --c-rare: #3498db;
-            --c-srare: #9b59b6;
-            --c-urare: #e74c3c;
-            --c-legendary: #f1c40f;
+            --bg-color: #0d0f12;
+            --card-bg: #16191e;
+            --card-border: #262b33;
+            --accent-green: #22c55e;
+            --accent-green-bg: #143522;
+            --text-primary: #ffffff;
+            --text-secondary: #94a3b8;
+            
+            --c-commune: #94a3b8;
+            --c-peu-commune: #22c55e;
+            --c-rare: #3b82f6;
+            --c-super-rare: #a855f7;
+            --c-ultra-rare: #ef4444;
+            --c-legendaire: #eab308;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, -apple-system, sans-serif; user-select: none; }
-        body { background: #0e1117; color: #f0f3f8; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 12px; }
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; user-select: none; }
+        body { background-color: var(--bg-color); color: var(--text-primary); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding-bottom: 70px; }
 
-        header { width: 100%; max-width: 420px; display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 12px; }
-        .logo { font-size: 22px; font-weight: 900; letter-spacing: 1px; color: #fff; display: flex; align-items: center; gap: 8px; }
-        .logo span { background: linear-gradient(135deg, #e74c3c, #f1c40f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-        .counter-badge { background: #1a202c; border: 1px solid #2d3748; padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 13px; color: #f1c40f; }
+        header { width: 100%; max-width: 420px; padding: 16px 20px; display: flex; justify-content: flex-end; align-items: center; gap: 12px; }
+        .currency-badge { background: #132219; border: 1px solid #1c422b; border-radius: 20px; padding: 6px 14px; display: flex; align-items: center; gap: 8px; color: var(--accent-green); font-weight: 800; font-size: 14px; }
+        .currency-icon { width: 18px; height: 18px; background: var(--accent-green); color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 900; }
+        .notification-btn { position: relative; background: #1a1d24; border: 1px solid #2a2f3a; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 16px; cursor: pointer; }
+        .notif-badge { position: absolute; top: -2px; right: -2px; background: #ef4444; color: white; font-size: 10px; font-weight: 900; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 
-        .nav-bar { display: flex; width: 100%; max-width: 420px; gap: 8px; margin-bottom: 16px; }
-        .nav-btn { flex: 1; padding: 12px; border: none; border-radius: 12px; background: #1a202c; color: #a0aec0; font-weight: 700; font-size: 14px; cursor: pointer; transition: 0.2s; }
-        .nav-btn.active { background: #3182ce; color: #fff; box-shadow: 0 4px 14px rgba(49, 130, 206, 0.4); }
+        .main-container { width: 100%; max-width: 420px; flex: 1; display: flex; flex-direction: column; align-items: center; padding: 10px 20px; }
 
-        .container { width: 100%; max-width: 420px; display: flex; flex-direction: column; align-items: center; }
+        .title-primary { font-size: 32px; font-weight: 900; text-align: center; margin-bottom: 24px; color: #fff; letter-spacing: -0.5px; }
 
-        .booster-card { background: linear-gradient(145deg, #1e2640, #111625); border: 2px solid #2b3654; border-radius: 20px; padding: 24px 20px; width: 100%; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        .booster-img { width: 100px; height: 130px; margin: 0 auto 16px auto; background: linear-gradient(135deg, #e74c3c, #8e44ad); border-radius: 10px; border: 2px solid #fff; display: flex; align-items: center; justify-content: center; font-size: 40px; box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
-        .booster-title { font-size: 20px; font-weight: 900; color: #fff; margin-bottom: 6px; }
-        .booster-desc { font-size: 13px; color: #a0aec0; margin-bottom: 20px; }
-        .btn-open { background: linear-gradient(135deg, #e53e3e, #dd6b20); color: #fff; border: none; padding: 16px; border-radius: 14px; width: 100%; font-weight: 900; font-size: 16px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 6px 20px rgba(229, 62, 62, 0.4); }
-
-        .card-wrapper { width: 100%; display: flex; justify-content: center; margin-top: 10px; margin-bottom: 16px; }
-        .physical-card { width: 310px; height: 440px; border-radius: 16px; background: #1a1a24; border: 8px solid #2d3748; padding: 12px; display: flex; flex-direction: column; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.8); }
+        .booster-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; flex: 1; }
+        .booster-subtitle { color: var(--text-secondary); font-size: 15px; font-weight: 500; margin-bottom: 6px; text-align: center; }
+        .booster-link { color: var(--accent-green); font-size: 14px; font-weight: 700; text-decoration: none; margin-bottom: 30px; }
         
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-        .card-name { font-size: 15px; font-weight: 900; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 190px; }
-        .card-badge { padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 900; color: #000; text-transform: uppercase; }
+        .booster-pack-graphic { width: 200px; height: 280px; background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%); border-radius: 12px; border: 3px solid #cbd5e1; box-shadow: 0 15px 35px rgba(0,0,0,0.6); position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 30px; overflow: hidden; }
+        .booster-pack-graphic::before, .booster-pack-graphic::after { content: ''; position: absolute; left: 0; right: 0; height: 10px; background: repeating-linear-gradient(90deg, #cbd5e1, #cbd5e1 4px, transparent 4px, transparent 8px); }
+        .booster-pack-graphic::before { top: 0; }
+        .booster-pack-graphic::after { bottom: 0; }
+        .puzzle-bg { position: absolute; inset: 0; opacity: 0.15; background-image: radial-gradient(#000 2px, transparent 2px); background-size: 16px 16px; }
+        .booster-logo { width: 70px; height: 70px; background: #000; border-radius: 18px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 900; font-size: 22px; letter-spacing: -1px; z-index: 2; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
 
-        .card-image-box { width: 100%; height: 210px; border-radius: 10px; overflow: hidden; position: relative; background: #0f131a; border: 2px solid rgba(255,255,255,0.1); }
-        .card-image-box img { width: 100%; height: 100%; object-fit: cover; }
-        .card-shiny-glint { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, transparent 50%, rgba(255,215,0,0.3) 100%); display: none; }
+        .btn-open-main { background: transparent; border: none; color: var(--accent-green); font-size: 22px; font-weight: 900; cursor: pointer; text-align: center; letter-spacing: 0.5px; transition: transform 0.1s; }
+        .btn-open-main:active { transform: scale(0.95); }
 
-        .card-stats { display: flex; justify-content: space-between; background: #0f172a; padding: 8px 12px; border-radius: 8px; margin: 10px 0; border: 1px solid #1e293b; }
-        .stat-item { text-align: center; }
-        .stat-lbl { font-size: 9px; color: #64748b; font-weight: 800; }
-        .stat-val { font-size: 14px; font-weight: 900; color: #f8fafc; }
+        .card-view-container { width: 100%; display: flex; flex-direction: column; align-items: center; }
+        .card-progress { font-size: 14px; font-weight: 700; color: var(--text-secondary); margin-bottom: 12px; }
 
-        .card-text { font-size: 11px; color: #cbd5e1; line-height: 1.35; flex: 1; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; text-align: left; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px; }
+        .wiki-card { width: 100%; max-width: 320px; background: #16191e; border: 3px solid #2d333f; border-radius: 16px; padding: 14px; display: flex; flex-direction: column; position: relative; box-shadow: 0 12px 30px rgba(0,0,0,0.8); }
+        .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+        .card-title { font-size: 16px; font-weight: 900; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
+        .card-badge { padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 900; text-transform: uppercase; color: #000; }
+        .card-img-box { width: 100%; height: 200px; background: #0a0c0e; border-radius: 10px; overflow: hidden; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.05); }
+        .card-img-box img { width: 100%; height: 100%; object-fit: cover; }
+        .card-stats { display: flex; justify-content: space-between; background: #0d0f12; padding: 8px 12px; border-radius: 8px; margin-bottom: 10px; }
+        .stat-val { font-size: 13px; font-weight: 900; color: #fff; }
+        .stat-lbl { font-size: 9px; color: var(--text-secondary); font-weight: 700; }
+        .card-description { font-size: 11px; color: #94a3b8; line-height: 1.4; height: 48px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
 
-        .rarity-C { border-color: var(--c-common); }
-        .rarity-PC { border-color: var(--c-uncommon); }
-        .rarity-R { border-color: var(--c-rare); }
-        .rarity-SR { border-color: var(--c-srare); }
-        .rarity-UR { border-color: var(--c-urare); }
-        .rarity-L { border-color: var(--c-legendary); box-shadow: 0 0 20px rgba(241, 196, 15, 0.4); }
-        .is-shiny .card-shiny-glint { display: block; }
+        .btn-action { width: 100%; max-width: 320px; background: var(--accent-green-bg); border: 1px solid var(--accent-green); color: var(--accent-green); padding: 14px; border-radius: 12px; font-weight: 900; font-size: 16px; cursor: pointer; margin-top: 16px; text-transform: uppercase; }
 
         .grid-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%; }
-        .mini-card { background: #161b26; border-radius: 12px; border: 3px solid #2d3748; padding: 8px; display: flex; flex-direction: column; position: relative; }
-        .mini-img { width: 100%; height: 90px; border-radius: 6px; object-fit: cover; margin-bottom: 6px; background: #0d1117; }
+        .mini-card { background: #16191e; border: 2px solid #2d333f; border-radius: 10px; padding: 8px; display: flex; flex-direction: column; }
+        .mini-img { width: 100%; height: 80px; object-fit: cover; border-radius: 6px; background: #000; margin-bottom: 6px; }
         .mini-title { font-size: 11px; font-weight: 800; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .mini-rarity { font-size: 9px; font-weight: 900; margin-top: 2px; }
 
+        nav.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #111317; border-top: 1px solid #1e2229; display: flex; justify-content: space-around; padding: 10px 0; z-index: 100; }
+        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #64748b; text-decoration: none; font-size: 11px; font-weight: 700; background: none; border: none; cursor: pointer; }
+        .nav-item.active { color: var(--accent-green); }
+        .nav-icon { font-size: 18px; }
+
         .hidden { display: none !important; }
-        .loader { color: #f1c40f; font-weight: bold; margin: 40px 0; font-size: 16px; text-align: center; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo">WIKI<span>CARDS</span></div>
-        <div class="counter-badge">Collection : <span id="col-count">0</span></div>
+        <div class="currency-badge">
+            <div class="currency-icon">W</div>
+            <span id="coin-count">10 964</span>
+        </div>
+        <div class="notification-btn">
+            🔔
+            <div class="notif-badge">3</div>
+        </div>
     </header>
 
-    <div class="nav-bar">
-        <button class="nav-btn active" id="tab-shop" onclick="switchTab('shop')">Boutique</button>
-        <button class="nav-btn" id="tab-codex" onclick="switchTab('codex')">Codex</button>
-    </div>
-
-    <div id="view-shop" class="container">
-        <div class="booster-card">
-            <div class="booster-img">🎴</div>
-            <div class="booster-title">Booster Wikipédia</div>
-            <div class="booster-desc">Tirage de 10 cartes variées avec images garanties et raretés équilibrées.</div>
-            <button class="btn-open" onclick="startPull()">Ouvrir un Paquet (10 Cartes)</button>
-        </div>
-    </div>
-
-    <div id="view-pull" class="container hidden">
-        <div id="pull-loader" class="loader">Tirage des 10 cartes en cours...</div>
+    <!-- SECTION BOUTIQUE -->
+    <div id="view-shop" class="main-container">
+        <h1 class="title-primary">Ouvrir un paquet</h1>
         
-        <div id="pull-display" class="hidden" style="width:100%; display:flex; flex-direction:column; align-items:center;">
-            <div id="card-counter" style="color:#a0aec0; font-weight:800; font-size:13px; margin-bottom:6px;">Carte 1 / 10</div>
-            
-            <div class="card-wrapper">
-                <div class="physical-card" id="active-card">
-                    <div class="card-header">
-                        <div class="card-name" id="c-name">Titre</div>
-                        <div class="card-badge" id="c-badge">COMMUNE</div>
-                    </div>
-                    <div class="card-image-box">
-                        <img id="c-img" src="" alt="Visuel" onerror="this.src='https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&q=80'">
-                        <div class="card-shiny-glint"></div>
-                    </div>
-                    <div class="card-stats">
-                        <div class="stat-item"><div class="stat-lbl">ATK</div><div class="stat-val" id="c-atk">0</div></div>
-                        <div class="stat-item"><div class="stat-lbl">DEF</div><div class="stat-val" id="c-def">0</div></div>
-                    </div>
-                    <div class="card-text" id="c-desc">Résumé...</div>
-                </div>
+        <div class="booster-wrapper">
+            <div class="booster-subtitle">Découvrez 5 nouvelles cartes Wikipédia</div>
+            <a href="#" class="booster-link">Comment ça marche ?</a>
+
+            <div class="booster-pack-graphic">
+                <div class="puzzle-bg"></div>
+                <div class="booster-logo">WM</div>
             </div>
 
-            <button class="btn-open" id="btn-next" onclick="nextCard()">Carte Suivante ➔</button>
-            <button class="nav-btn" style="margin-top:10px; width:100%;" onclick="showRecap()">Tout Passer (Vue Grille)</button>
-        </div>
-
-        <div id="recap-box" class="hidden" style="width:100%;">
-            <div class="grid-cards" id="recap-grid"></div>
-            <button class="btn-open" style="margin-top:16px;" onclick="switchTab('shop')">Retour à la boutique</button>
+            <button class="btn-open-main" onclick="openPack()">Ouvrir</button>
         </div>
     </div>
 
-    <div id="view-codex" class="container hidden">
-        <div id="codex-empty" style="color:#718096; text-align:center; margin-top:40px; font-size:14px;">Votre collection est vide pour le moment.</div>
-        <div class="grid-cards" id="codex-grid"></div>
+    <!-- SECTION TIRAGE CARTE PAR CARTE -->
+    <div id="view-pull" class="main-container hidden">
+        <div class="card-view-container">
+            <div class="card-progress" id="pull-progress">Carte 1 / 5</div>
+
+            <div id="pull-loading" style="color: var(--accent-green); font-weight: bold; margin: 40px 0;">Recherche sur Wikipédia...</div>
+
+            <div id="pull-card-box" class="wiki-card hidden">
+                <div class="card-top">
+                    <div class="card-title" id="c-title">Titre</div>
+                    <div class="card-badge" id="c-badge">COMMUNE</div>
+                </div>
+                <div class="card-img-box">
+                    <img id="c-img" src="" alt="Visuel" onerror="this.src='https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&q=80'">
+                </div>
+                <div class="card-stats">
+                    <div><span class="stat-lbl">ATK </span><span class="stat-val" id="c-atk">0</span></div>
+                    <div><span class="stat-lbl">DEF </span><span class="stat-val" id="c-def">0</span></div>
+                </div>
+                <div class="card-description" id="c-desc">Résumé...</div>
+            </div>
+
+            <button class="btn-action hidden" id="btn-next-card" onclick="drawNextCardInPack()">Carte Suivante ➔</button>
+        </div>
     </div>
+
+    <!-- RECAP DU PAQUET -->
+    <div id="view-recap" class="main-container hidden">
+        <h1 class="title-primary" style="font-size: 22px;">Paquet ouvert !</h1>
+        <div class="grid-cards" id="recap-grid" style="margin-bottom: 20px;"></div>
+        <button class="btn-action" onclick="showTab('shop')">Terminer</button>
+    </div>
+
+    <!-- SECTION COLLECTION -->
+    <div id="view-collection" class="main-container hidden">
+        <h1 class="title-primary" style="font-size: 22px;">Ma Collection</h1>
+        <div id="col-empty" style="color: var(--text-secondary); margin-top: 30px;">Aucune carte pour l'instant.</div>
+        <div class="grid-cards" id="collection-grid"></div>
+    </div>
+
+    <nav class="bottom-nav">
+        <button class="nav-item active" id="nav-shop" onclick="showTab('shop')">
+            <span class="nav-icon">🧩</span>
+            <span>Paquets</span>
+        </button>
+        <button class="nav-item" id="nav-col" onclick="showTab('collection')">
+            <span class="nav-icon">📖</span>
+            <span>Collection</span>
+        </button>
+    </nav>
 
     <script>
-        let collection = [];
-        let currentPack = [];
-        let currentIdx = 0;
+        let myCollection = [];
+        let activePackCards = [];
+        let currentCardIndex = 0;
 
-        function switchTab(tab) {
+        function showTab(tab) {
             document.getElementById('view-shop').classList.add('hidden');
             document.getElementById('view-pull').classList.add('hidden');
-            document.getElementById('view-codex').classList.add('hidden');
-            document.getElementById('tab-shop').classList.remove('active');
-            document.getElementById('tab-codex').classList.remove('active');
+            document.getElementById('view-recap').classList.add('hidden');
+            document.getElementById('view-collection').classList.add('hidden');
+            
+            document.getElementById('nav-shop').classList.remove('active');
+            document.getElementById('nav-col').classList.remove('active');
 
-            if(tab === 'shop') {
+            if (tab === 'shop') {
                 document.getElementById('view-shop').classList.remove('hidden');
-                document.getElementById('tab-shop').classList.add('active');
-            } else if(tab === 'codex') {
-                document.getElementById('view-codex').classList.remove('hidden');
-                document.getElementById('tab-codex').classList.add('active');
-                renderCodex();
+                document.getElementById('nav-shop').classList.add('active');
+            } else if (tab === 'collection') {
+                document.getElementById('view-collection').classList.remove('hidden');
+                document.getElementById('nav-col').classList.add('active');
+                renderCollection();
             }
         }
 
-        function calculateRarity(score) {
-            if (score > 85) return { code: 'L', name: 'Légendaire', color: '#f1c40f', shiny: Math.random() < 0.05 };
-            if (score > 70) return { code: 'UR', name: 'Ultra Rare', color: '#e74c3c', shiny: false };
-            if (score > 50) return { code: 'SR', name: 'Super Rare', color: '#9b59b6', shiny: false };
-            if (score > 30) return { code: 'R', name: 'Rare', color: '#3498db', shiny: false };
-            if (score > 15) return { code: 'PC', name: 'Peu Commune', color: '#2ecc71', shiny: false };
-            return { code: 'C', name: 'Commune', color: '#8e9eab', shiny: false };
+        /* CALCUL STRICT DES RARETÉS (Légendaire ~0.1%) */
+        function getRandomRarity() {
+            let roll = Math.random() * 100;
+            if (roll < 0.1)  return { code: 'L',  name: 'Légendaire',  color: '#eab308' };
+            if (roll < 1.5)  return { code: 'UR', name: 'Ultra Rare', color: '#ef4444' };
+            if (roll < 6.5)  return { code: 'SR', name: 'Super Rare', color: '#a855f7' };
+            if (roll < 20.0) return { code: 'R',  name: 'Rare',       color: '#3b82f6' };
+            if (roll < 45.0) return { code: 'PC', name: 'Peu Commune',color: '#22c55e' };
+            return { code: 'C', name: 'Commune', color: '#94a3b8' };
         }
 
-        async function startPull() {
+        function openPack() {
+            activePackCards = [];
+            currentCardIndex = 0;
+            
             document.getElementById('view-shop').classList.add('hidden');
             document.getElementById('view-pull').classList.remove('hidden');
-            document.getElementById('pull-loader').classList.remove('hidden');
-            document.getElementById('pull-display').classList.add('hidden');
-            document.getElementById('recap-box').classList.add('hidden');
-
-            currentPack = [];
-
-            try {
-                for (let i = 0; i < 10; i++) {
-                    let res = await fetch('https://fr.wikipedia.org/api/rest_v1/page/random/summary');
-                    let data = await res.json();
-                    
-                    let title = data.title || "Article Wikipédia";
-                    let desc = data.extract || "Pas de description disponible.";
-                    let img = (data.thumbnail && data.thumbnail.source) ? data.thumbnail.source : "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&q=80";
-
-                    let score = Math.floor(Math.random() * 100);
-                    let rarity = calculateRarity(score);
-
-                    let card = {
-                        title: title,
-                        desc: desc,
-                        img: img,
-                        rarity: rarity,
-                        atk: Math.floor(1000 + Math.random() * 8000),
-                        def: Math.floor(1000 + Math.random() * 8000)
-                    };
-
-                    currentPack.push(card);
-                    if (!collection.some(item => item.title === card.title)) {
-                        collection.push(card);
-                    }
-                }
-
-                document.getElementById('col-count').innerText = collection.length;
-                currentIdx = 0;
-                document.getElementById('pull-loader').classList.add('hidden');
-                document.getElementById('pull-display').classList.remove('hidden');
-                displayActiveCard();
-            } catch(e) {
-                alert("Erreur de réseau. Veuillez réessayer.");
-                switchTab('shop');
-            }
+            
+            drawNextCardInPack();
         }
 
-        function displayActiveCard() {
-            if (currentIdx >= currentPack.length) {
+        async function drawNextCardInPack() {
+            if (currentCardIndex >= 5) {
                 showRecap();
                 return;
             }
-            let c = currentPack[currentIdx];
-            document.getElementById('card-counter').innerText = `Carte ${currentIdx + 1} / 10`;
 
-            let cardEl = document.getElementById('active-card');
-            cardEl.className = `physical-card rarity-${c.rarity.code} ${c.rarity.shiny ? 'is-shiny' : ''}`;
-            
-            let badge = document.getElementById('c-badge');
-            badge.innerText = c.rarity.name + (c.rarity.shiny ? ' ★' : '');
-            badge.style.background = c.rarity.color;
+            document.getElementById('pull-progress').innerText = `Carte ${currentCardIndex + 1} / 5`;
+            document.getElementById('pull-loading').classList.remove('hidden');
+            document.getElementById('pull-card-box').classList.add('hidden');
+            document.getElementById('btn-next-card').classList.add('hidden');
 
-            document.getElementById('c-name').innerText = c.title;
-            document.getElementById('c-img').src = c.img;
-            document.getElementById('c-atk').innerText = c.atk;
-            document.getElementById('c-def').innerText = c.def;
-            document.getElementById('c-desc').innerText = c.desc;
-        }
+            try {
+                let res = await fetch('https://fr.wikipedia.org/api/rest_v1/page/random/summary');
+                let data = await res.json();
 
-        function nextCard() {
-            currentIdx++;
-            if (currentIdx < currentPack.length) displayActiveCard();
-            else showRecap();
+                let title = data.title || "Article Wikipédia";
+                let desc = data.extract || "Pas de description disponible pour cet article.";
+                let img = (data.thumbnail && data.thumbnail.source) ? data.thumbnail.source : "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&q=80";
+                
+                let rarity = getRandomRarity();
+
+                let card = {
+                    title: title,
+                    desc: desc,
+                    img: img,
+                    rarity: rarity,
+                    atk: Math.floor(1000 + Math.random() * 8500),
+                    def: Math.floor(1000 + Math.random() * 8500)
+                };
+
+                activePackCards.push(card);
+                if (!myCollection.some(c => c.title === card.title)) {
+                    myCollection.push(card);
+                }
+
+                // Affichage
+                document.getElementById('c-title').innerText = card.title;
+                document.getElementById('c-desc').innerText = card.desc;
+                document.getElementById('c-img').src = card.img;
+                document.getElementById('c-atk').innerText = card.atk;
+                document.getElementById('c-def').innerText = card.def;
+
+                let badge = document.getElementById('c-badge');
+                badge.innerText = card.rarity.name;
+                badge.style.background = card.rarity.color;
+
+                let cardBox = document.getElementById('pull-card-box');
+                cardBox.style.borderColor = card.rarity.color;
+
+                document.getElementById('pull-loading').classList.add('hidden');
+                cardBox.classList.remove('hidden');
+                document.getElementById('btn-next-card').classList.remove('hidden');
+
+                currentCardIndex++;
+            } catch(e) {
+                alert("Erreur de connexion Wikipédia, réessai...");
+                drawNextCardInPack();
+            }
         }
 
         function showRecap() {
-            document.getElementById('pull-display').classList.add('hidden');
+            document.getElementById('view-pull').classList.add('hidden');
+            document.getElementById('view-recap').classList.remove('hidden');
+
             let grid = document.getElementById('recap-grid');
             grid.innerHTML = '';
 
-            currentPack.forEach(c => {
+            activePackCards.forEach(c => {
                 let div = document.createElement('div');
                 div.className = 'mini-card';
                 div.style.borderColor = c.rarity.color;
                 div.innerHTML = `
                     <img src="${c.img}" class="mini-img" onerror="this.src='https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&q=80'">
                     <div class="mini-title">${c.title}</div>
-                    <div class="mini-rarity" style="color:${c.rarity.color}">${c.rarity.name} ${c.rarity.shiny ? '★' : ''}</div>
+                    <div class="mini-rarity" style="color:${c.rarity.color}">${c.rarity.name}</div>
                 `;
                 grid.appendChild(div);
             });
-
-            document.getElementById('recap-box').classList.remove('hidden');
         }
 
-        function renderCodex() {
-            let grid = document.getElementById('codex-grid');
-            let empty = document.getElementById('codex-empty');
+        function renderCollection() {
+            let grid = document.getElementById('collection-grid');
+            let empty = document.getElementById('col-empty');
             grid.innerHTML = '';
 
-            if (collection.length === 0) {
+            if (myCollection.length === 0) {
                 empty.classList.remove('hidden');
                 return;
             }
             empty.classList.add('hidden');
 
-            collection.forEach(c => {
+            myCollection.forEach(c => {
                 let div = document.createElement('div');
                 div.className = 'mini-card';
                 div.style.borderColor = c.rarity.color;
                 div.innerHTML = `
                     <img src="${c.img}" class="mini-img" onerror="this.src='https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&q=80'">
                     <div class="mini-title">${c.title}</div>
-                    <div class="mini-rarity" style="color:${c.rarity.color}">${c.rarity.name} ${c.rarity.shiny ? '★' : ''}</div>
+                    <div class="mini-rarity" style="color:${c.rarity.color}">${c.rarity.name}</div>
                 `;
                 grid.appendChild(div);
             });
