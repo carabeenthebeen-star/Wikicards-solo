@@ -3,311 +3,627 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>WikiMaster Solo</title>
+    <title>WikiMaster</title>
     <style>
         :root {
-            --bg-color: #0d0f12;
-            --card-bg: #16191e;
-            --card-border: #262b33;
+            --bg-color: #0b0c0e;
+            --surface-color: #121418;
+            --border-color: #1f232b;
             --accent-green: #22c55e;
-            --accent-green-bg: #143522;
+            --accent-green-dark: #15803d;
             --text-primary: #ffffff;
-            --text-secondary: #94a3b8;
-            
+            --text-secondary: #8a94a6;
+            --badge-warning-bg: #1c150c;
+            --badge-warning-border: #3d2e17;
+            --badge-warning-text: #eab308;
+
             --c-commune: #94a3b8;
             --c-peu-commune: #22c55e;
             --c-rare: #3b82f6;
             --c-super-rare: #a855f7;
             --c-ultra-rare: #ef4444;
-            --c-legendaire: #eab308;
+            --c-legendaire: #f59e0b;
         }
 
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; user-select: none; }
-        body { background-color: var(--bg-color); color: var(--text-primary); min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: space-between; padding-bottom: 70px; }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
 
-        header { width: 100%; max-width: 420px; padding: 16px 20px; display: flex; justify-content: flex-end; align-items: center; gap: 12px; }
-        .currency-badge { background: #132219; border: 1px solid #1c422b; border-radius: 20px; padding: 6px 14px; display: flex; align-items: center; gap: 8px; color: var(--accent-green); font-weight: 800; font-size: 14px; }
-        .currency-icon { width: 18px; height: 18px; background: var(--accent-green); color: #000; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 900; }
-        .notification-btn { position: relative; background: #1a1d24; border: 1px solid #2a2f3a; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; color: #fff; font-size: 16px; cursor: pointer; }
-        .notif-badge { position: absolute; top: -2px; right: -2px; background: #ef4444; color: white; font-size: 10px; font-weight: 900; width: 16px; height: 16px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: space-between;
+            overflow-x: hidden;
+            padding-bottom: 75px;
+        }
 
-        .main-container { width: 100%; max-width: 420px; flex: 1; display: flex; flex-direction: column; align-items: center; padding: 10px 20px; }
+        /* HEADER */
+        header {
+            width: 100%;
+            max-width: 420px;
+            padding: 14px 18px;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            gap: 12px;
+            z-index: 10;
+        }
 
-        .title-primary { font-size: 32px; font-weight: 900; text-align: center; margin-bottom: 24px; color: #fff; letter-spacing: -0.5px; }
+        .currency-badge {
+            background: #0f1f17;
+            border: 1px solid #1c3d2a;
+            border-radius: 20px;
+            padding: 6px 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent-green);
+            font-weight: 800;
+            font-size: 14px;
+            letter-spacing: 0.3px;
+        }
 
-        .booster-wrapper { display: flex; flex-direction: column; align-items: center; justify-content: center; width: 100%; flex: 1; }
-        .booster-subtitle { color: var(--text-secondary); font-size: 15px; font-weight: 500; margin-bottom: 6px; text-align: center; }
-        .booster-link { color: var(--accent-green); font-size: 14px; font-weight: 700; text-decoration: none; margin-bottom: 30px; }
-        
-        .booster-pack-graphic { width: 200px; height: 280px; background: linear-gradient(180deg, #ffffff 0%, #e2e8f0 100%); border-radius: 12px; border: 3px solid #cbd5e1; box-shadow: 0 15px 35px rgba(0,0,0,0.6); position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center; margin-bottom: 30px; overflow: hidden; }
-        .booster-pack-graphic::before, .booster-pack-graphic::after { content: ''; position: absolute; left: 0; right: 0; height: 10px; background: repeating-linear-gradient(90deg, #cbd5e1, #cbd5e1 4px, transparent 4px, transparent 8px); }
-        .booster-pack-graphic::before { top: 0; }
-        .booster-pack-graphic::after { bottom: 0; }
-        .puzzle-bg { position: absolute; inset: 0; opacity: 0.15; background-image: radial-gradient(#000 2px, transparent 2px); background-size: 16px 16px; }
-        .booster-logo { width: 70px; height: 70px; background: #000; border-radius: 18px; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 900; font-size: 22px; letter-spacing: -1px; z-index: 2; box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+        .currency-icon {
+            width: 18px;
+            height: 18px;
+            border: 1.5px solid var(--accent-green);
+            color: var(--accent-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 10px;
+            font-weight: 900;
+        }
 
-        .btn-open-main { background: transparent; border: none; color: var(--accent-green); font-size: 22px; font-weight: 900; cursor: pointer; text-align: center; letter-spacing: 0.5px; transition: transform 0.1s; }
-        .btn-open-main:active { transform: scale(0.95); }
+        .notif-btn {
+            position: relative;
+            background: #14171d;
+            border: 1px solid #232833;
+            border-radius: 50%;
+            width: 38px;
+            height: 38px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+        }
 
-        .card-view-container { width: 100%; display: flex; flex-direction: column; align-items: center; }
-        .card-progress { font-size: 14px; font-weight: 700; color: var(--text-secondary); margin-bottom: 12px; }
+        .notif-badge {
+            position: absolute;
+            top: -2px;
+            right: -2px;
+            background: #ef4444;
+            color: white;
+            font-size: 10px;
+            font-weight: 900;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 2px solid var(--bg-color);
+        }
 
-        .wiki-card { width: 100%; max-width: 320px; background: #16191e; border: 3px solid #2d333f; border-radius: 16px; padding: 14px; display: flex; flex-direction: column; position: relative; box-shadow: 0 12px 30px rgba(0,0,0,0.8); }
-        .card-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .card-title { font-size: 16px; font-weight: 900; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 200px; }
-        .card-badge { padding: 4px 8px; border-radius: 6px; font-size: 10px; font-weight: 900; text-transform: uppercase; color: #000; }
-        .card-img-box { width: 100%; height: 200px; background: #0a0c0e; border-radius: 10px; overflow: hidden; margin-bottom: 10px; border: 1px solid rgba(255,255,255,0.05); }
-        .card-img-box img { width: 100%; height: 100%; object-fit: cover; }
-        .card-stats { display: flex; justify-content: space-between; background: #0d0f12; padding: 8px 12px; border-radius: 8px; margin-bottom: 10px; }
+        /* MAIN CONTAINER */
+        .main-container {
+            width: 100%;
+            max-width: 420px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 0 20px;
+        }
+
+        .title-main {
+            font-size: 32px;
+            font-weight: 900;
+            text-align: center;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+        }
+
+        /* WARNING BANNER */
+        .banner-warning {
+            width: 100%;
+            background: var(--badge-warning-bg);
+            border: 1px solid var(--badge-warning-border);
+            border-radius: 16px;
+            padding: 16px 18px;
+            margin-bottom: 24px;
+        }
+
+        .banner-title {
+            color: var(--badge-warning-text);
+            font-size: 15px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .banner-desc {
+            color: #d1d5db;
+            font-size: 12.5px;
+            line-height: 1.45;
+            margin-bottom: 12px;
+        }
+
+        .banner-link {
+            color: var(--badge-warning-text);
+            font-size: 13px;
+            font-weight: 700;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+
+        /* BOOSTER SECTION */
+        .booster-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            flex: 1;
+            justify-content: space-between;
+            padding-bottom: 20px;
+        }
+
+        .booster-subtitle {
+            color: var(--text-secondary);
+            font-size: 14.5px;
+            font-weight: 500;
+            margin-bottom: 6px;
+            text-align: center;
+        }
+
+        .booster-link {
+            color: var(--accent-green);
+            font-size: 13.5px;
+            font-weight: 700;
+            text-decoration: none;
+            margin-bottom: 28px;
+            cursor: pointer;
+        }
+
+        /* GRAPHISME SACHET/PACK WIKIMASTER */
+        .booster-pack {
+            width: 190px;
+            height: 270px;
+            background: linear-gradient(175deg, #ffffff 0%, #e2e8f0 70%, #cbd5e1 100%);
+            border-radius: 12px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 20px rgba(255,255,255,0.05);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.4);
+        }
+
+        .booster-pack::before, .booster-pack::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            right: 0;
+            height: 8px;
+            background: repeating-linear-gradient(90deg, #94a3b8, #94a3b8 3px, transparent 3px, transparent 6px);
+            z-index: 3;
+        }
+        .booster-pack::before { top: 0; }
+        .booster-pack::after { bottom: 0; }
+
+        .puzzle-pattern {
+            position: absolute;
+            inset: 0;
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        .wm-badge {
+            width: 72px;
+            height: 72px;
+            background: #000000;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #ffffff;
+            z-index: 2;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+            position: relative;
+        }
+
+        .wm-logo-svg {
+            width: 44px;
+            height: 44px;
+            fill: #ffffff;
+        }
+
+        .btn-open-main {
+            background: transparent;
+            border: none;
+            color: var(--accent-green);
+            font-size: 22px;
+            font-weight: 900;
+            cursor: pointer;
+            text-align: center;
+            letter-spacing: 0.5px;
+            margin-top: 20px;
+            transition: transform 0.1s, opacity 0.2s;
+        }
+
+        .btn-open-main:active {
+            transform: scale(0.95);
+        }
+
+        .btn-open-main:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        /* FLIP CARD 3D */
+        .card-stage {
+            perspective: 1000px;
+            width: 290px;
+            height: 410px;
+            margin-top: 15px;
+            margin-bottom: 20px;
+        }
+
+        .card-flipper {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+        }
+
+        .card-flipper.flipped {
+            transform: rotateY(180deg);
+        }
+
+        .card-face {
+            position: absolute;
+            inset: 0;
+            backface-visibility: hidden;
+            border-radius: 18px;
+            border: 3px solid #262c38;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            background: #14171f;
+            box-shadow: 0 16px 36px rgba(0,0,0,0.9);
+        }
+
+        /* BACK FACE */
+        .card-back {
+            background: linear-gradient(145deg, #0d1017 0%, #1a2130 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-color: #2e384d;
+        }
+
+        .card-back-logo {
+            width: 90px;
+            height: 90px;
+            background: #000;
+            border: 2px solid var(--accent-green);
+            border-radius: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 25px rgba(34, 197, 94, 0.25);
+        }
+
+        /* FRONT FACE */
+        .card-front {
+            transform: rotateY(180deg);
+        }
+
+        .card-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .card-title-txt {
+            font-size: 15px;
+            font-weight: 900;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 170px;
+        }
+
+        .card-rarity-badge {
+            padding: 4px 8px;
+            border-radius: 6px;
+            font-size: 9.5px;
+            font-weight: 900;
+            text-transform: uppercase;
+            color: #000;
+        }
+
+        .card-img-container {
+            width: 100%;
+            height: 180px;
+            background: #080a0d;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 8px;
+            border: 1px solid rgba(255,255,255,0.06);
+        }
+
+        .card-img-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .card-stats-row {
+            display: flex;
+            justify-content: space-between;
+            background: #090c10;
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-bottom: 8px;
+        }
+
+        .stat-lbl { font-size: 9px; color: var(--text-secondary); font-weight: 800; }
         .stat-val { font-size: 13px; font-weight: 900; color: #fff; }
-        .stat-lbl { font-size: 9px; color: var(--text-secondary); font-weight: 700; }
-        .card-description { font-size: 11px; color: #94a3b8; line-height: 1.4; height: 48px; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; }
 
-        .btn-action { width: 100%; max-width: 320px; background: var(--accent-green-bg); border: 1px solid var(--accent-green); color: var(--accent-green); padding: 14px; border-radius: 12px; font-weight: 900; font-size: 16px; cursor: pointer; margin-top: 16px; text-transform: uppercase; }
+        .card-desc-txt {
+            font-size: 11px;
+            color: #94a3b8;
+            line-height: 1.4;
+            height: 44px;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
 
-        .grid-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%; }
-        .mini-card { background: #16191e; border: 2px solid #2d333f; border-radius: 10px; padding: 8px; display: flex; flex-direction: column; }
-        .mini-img { width: 100%; height: 80px; object-fit: cover; border-radius: 6px; background: #000; margin-bottom: 6px; }
-        .mini-title { font-size: 11px; font-weight: 800; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .mini-rarity { font-size: 9px; font-weight: 900; margin-top: 2px; }
+        .btn-action-primary {
+            width: 100%;
+            max-width: 290px;
+            background: #122e1d;
+            border: 1.5px solid var(--accent-green);
+            color: var(--accent-green);
+            padding: 14px;
+            border-radius: 14px;
+            font-weight: 900;
+            font-size: 15px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
 
-        nav.bottom-nav { position: fixed; bottom: 0; left: 0; right: 0; background: #111317; border-top: 1px solid #1e2229; display: flex; justify-content: space-around; padding: 10px 0; z-index: 100; }
-        .nav-item { display: flex; flex-direction: column; align-items: center; gap: 4px; color: #64748b; text-decoration: none; font-size: 11px; font-weight: 700; background: none; border: none; cursor: pointer; }
-        .nav-item.active { color: var(--accent-green); }
-        .nav-icon { font-size: 18px; }
+        /* GRID SYSTEM */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            width: 100%;
+        }
+
+        .mini-card {
+            background: #14171f;
+            border: 2px solid #262c38;
+            border-radius: 12px;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .mini-img {
+            width: 100%;
+            height: 85px;
+            object-fit: cover;
+            border-radius: 8px;
+            background: #000;
+            margin-bottom: 8px;
+        }
+
+        .mini-title {
+            font-size: 11.5px;
+            font-weight: 800;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .mini-rarity {
+            font-size: 9px;
+            font-weight: 900;
+            margin-top: 3px;
+            text-transform: uppercase;
+        }
+
+        /* BOTTOM NAVBAR */
+        nav.bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #0f1115;
+            border-top: 1px solid #1a1e26;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0 12px 0;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: #525d73;
+            text-decoration: none;
+            font-size: 10.5px;
+            font-weight: 700;
+            background: none;
+            border: none;
+            cursor: pointer;
+            width: 20%;
+        }
+
+        .nav-item.active {
+            color: var(--accent-green);
+        }
+
+        .nav-icon-svg {
+            width: 22px;
+            height: 22px;
+            fill: currentColor;
+        }
 
         .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
+    <!-- HEADER -->
     <header>
         <div class="currency-badge">
             <div class="currency-icon">W</div>
             <span id="coin-count">10 964</span>
         </div>
-        <div class="notification-btn">
+        <div class="notif-btn">
             🔔
             <div class="notif-badge">3</div>
         </div>
     </header>
 
-    <!-- SECTION BOUTIQUE -->
+    <!-- SECTION SHOP -->
     <div id="view-shop" class="main-container">
-        <h1 class="title-primary">Ouvrir un paquet</h1>
-        
-        <div class="booster-wrapper">
-            <div class="booster-subtitle">Découvrez 5 nouvelles cartes Wikipédia</div>
-            <a href="#" class="booster-link">Comment ça marche ?</a>
+        <h1 class="title-main">Ouvrir un paquet</h1>
 
-            <div class="booster-pack-graphic">
-                <div class="puzzle-bg"></div>
-                <div class="booster-logo">WM</div>
+        <div class="banner-warning">
+            <div class="banner-title">Compte suspendu définitivement</div>
+            <div class="banner-desc">
+                Tes activités sont restreintes (paquets, échanges, marché, messages, etc.). Le détail de la sanction est dans tes notifications. Si tu penses qu'il s'agit d'une erreur, ouvre un ticket de support sur notre Discord.
+            </div>
+            <a class="banner-link">Ouvrir un ticket sur Discord</a>
+        </div>
+
+        <div class="booster-area">
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <div class="booster-subtitle">Découvrez 5 nouvelles cartes Wikipédia</div>
+                <a class="booster-link">Comment ça marche ?</a>
             </div>
 
-            <button class="btn-open-main" onclick="openPack()">Ouvrir</button>
+            <div class="booster-pack">
+                <svg class="puzzle-pattern" viewBox="0 0 100 100" preserveAspectRatio="none">
+                    <path d="M10,10 Q20,0 30,10 T50,10" fill="none" stroke="#e2e8f0" stroke-width="2" opacity="0.5"/>
+                    <circle cx="20" cy="30" r="12" fill="#ef4444" opacity="0.3"/>
+                    <circle cx="80" cy="40" r="15" fill="#3b82f6" opacity="0.3"/>
+                    <circle cx="30" cy="80" r="14" fill="#eab308" opacity="0.3"/>
+                    <circle cx="75" cy="85" r="10" fill="#a855f7" opacity="0.3"/>
+                </svg>
+
+                <div class="wm-badge">
+                    <svg class="wm-logo-svg" viewBox="0 0 24 24">
+                        <path d="M20.5 5.5l-3.5 13-3.5-9-3.5 9-3.5-13h2.5l2.2 9 3.3-8.5h2l3.3 8.5 2.2-9z"/>
+                    </svg>
+                </div>
+            </div>
+
+            <button class="btn-open-main" id="btn-open-pack" onclick="openBoosterPack()">Ouvrir</button>
         </div>
     </div>
 
-    <!-- SECTION TIRAGE CARTE PAR CARTE -->
+    <!-- SECTION PULL CARTE PAR CARTE -->
     <div id="view-pull" class="main-container hidden">
-        <div class="card-view-container">
-            <div class="card-progress" id="pull-progress">Carte 1 / 5</div>
+        <div id="pull-progress" style="font-size: 14px; font-weight: 700; color: var(--text-secondary); margin-bottom: 5px;">Carte 1 / 5</div>
 
-            <div id="pull-loading" style="color: var(--accent-green); font-weight: bold; margin: 40px 0;">Recherche sur Wikipédia...</div>
-
-            <div id="pull-card-box" class="wiki-card hidden">
-                <div class="card-top">
-                    <div class="card-title" id="c-title">Titre</div>
-                    <div class="card-badge" id="c-badge">COMMUNE</div>
+        <div class="card-stage" onclick="flipActiveCard()">
+            <div class="card-flipper" id="card-flipper">
+                <!-- DOS CACHÉ -->
+                <div class="card-face card-back">
+                    <div class="card-back-logo">
+                        <svg class="wm-logo-svg" viewBox="0 0 24 24" style="fill: var(--accent-green);">
+                            <path d="M20.5 5.5l-3.5 13-3.5-9-3.5 9-3.5-13h2.5l2.2 9 3.3-8.5h2l3.3 8.5 2.2-9z"/>
+                        </svg>
+                    </div>
                 </div>
-                <div class="card-img-box">
-                    <img id="c-img" src="" alt="Visuel" onerror="this.src='https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&q=80'">
+                <!-- RECTO -->
+                <div class="card-face card-front" id="card-front-box">
+                    <div class="card-header-flex">
+                        <div class="card-title-txt" id="c-title">...</div>
+                        <div class="card-rarity-badge" id="c-badge">COMMUNE</div>
+                    </div>
+                    <div class="card-img-container">
+                        <img id="c-img" src="" alt="Article image">
+                    </div>
+                    <div class="card-stats-row">
+                        <div><span class="stat-lbl">ATK </span><span class="stat-val" id="c-atk">0</span></div>
+                        <div><span class="stat-lbl">DEF </span><span class="stat-val" id="c-def">0</span></div>
+                    </div>
+                    <div class="card-desc-txt" id="c-desc">...</div>
                 </div>
-                <div class="card-stats">
-                    <div><span class="stat-lbl">ATK </span><span class="stat-val" id="c-atk">0</span></div>
-                    <div><span class="stat-lbl">DEF </span><span class="stat-val" id="c-def">0</span></div>
-                </div>
-                <div class="card-description" id="c-desc">Résumé...</div>
             </div>
-
-            <button class="btn-action hidden" id="btn-next-card" onclick="drawNextCardInPack()">Carte Suivante ➔</button>
         </div>
+
+        <button class="btn-action-primary" id="btn-next-step" onclick="handleNextStep()">Révéler la carte</button>
     </div>
 
-    <!-- RECAP DU PAQUET -->
+    <!-- SECTION RECAP -->
     <div id="view-recap" class="main-container hidden">
-        <h1 class="title-primary" style="font-size: 22px;">Paquet ouvert !</h1>
+        <h1 class="title-main" style="font-size: 22px; margin-bottom: 16px;">Tirage terminé !</h1>
         <div class="grid-cards" id="recap-grid" style="margin-bottom: 20px;"></div>
-        <button class="btn-action" onclick="showTab('shop')">Terminer</button>
+        <button class="btn-action-primary" onclick="switchTab('shop')">Continuer</button>
     </div>
 
     <!-- SECTION COLLECTION -->
     <div id="view-collection" class="main-container hidden">
-        <h1 class="title-primary" style="font-size: 22px;">Ma Collection</h1>
-        <div id="col-empty" style="color: var(--text-secondary); margin-top: 30px;">Aucune carte pour l'instant.</div>
+        <h1 class="title-main" style="font-size: 22px; margin-bottom: 16px;">Ma Collection</h1>
+        <div id="col-empty" style="color: var(--text-secondary); margin-top: 30px; text-align:center;">Aucune carte acquise.</div>
         <div class="grid-cards" id="collection-grid"></div>
     </div>
 
+    <!-- NAVBAR BOTTOM -->
     <nav class="bottom-nav">
-        <button class="nav-item active" id="nav-shop" onclick="showTab('shop')">
-            <span class="nav-icon">🧩</span>
+        <button class="nav-item active" id="nav-shop" onclick="switchTab('shop')">
+            <svg class="nav-icon-svg" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
             <span>Paquets</span>
         </button>
-        <button class="nav-item" id="nav-col" onclick="showTab('collection')">
-            <span class="nav-icon">📖</span>
+        <button class="nav-item" id="nav-col" onclick="switchTab('collection')">
+            <svg class="nav-icon-svg" viewBox="0 0 24 24"><path d="M4 6H2v14c0 1.1.9 2 2 2h14v-2H4V6zm16-4H8c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H8V4h12v12z"/></svg>
             <span>Collection</span>
         </button>
     </nav>
 
     <script>
         let myCollection = [];
-        let activePackCards = [];
-        let currentCardIndex = 0;
+        let preloadedCache = [];
+        let activePack = [];
+        let packIndex = 0;
+        let isCardFlipped = false;
 
-        function showTab(tab) {
-            document.getElementById('view-shop').classList.add('hidden');
-            document.getElementById('view-pull').classList.add('hidden');
-            document.getElementById('view-recap').classList.add('hidden');
-            document.getElementById('view-collection').classList.add('hidden');
-            
-            document.getElementById('nav-shop').classList.remove('active');
-            document.getElementById('nav-col').classList.remove('active');
+        const FALLBACK_IMG = "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&q=80";
 
-            if (tab === 'shop') {
-                document.getElementById('view-shop').classList.remove('hidden');
-                document.getElementById('nav-shop').classList.add('active');
-            } else if (tab === 'collection') {
-                document.getElementById('view-collection').classList.remove('hidden');
-                document.getElementById('nav-col').classList.add('active');
-                renderCollection();
-            }
-        }
-
-        /* CALCUL STRICT DES RARETÉS (Légendaire ~0.1%) */
-        function getRandomRarity() {
-            let roll = Math.random() * 100;
-            if (roll < 0.1)  return { code: 'L',  name: 'Légendaire',  color: '#eab308' };
-            if (roll < 1.5)  return { code: 'UR', name: 'Ultra Rare', color: '#ef4444' };
-            if (roll < 6.5)  return { code: 'SR', name: 'Super Rare', color: '#a855f7' };
-            if (roll < 20.0) return { code: 'R',  name: 'Rare',       color: '#3b82f6' };
-            if (roll < 45.0) return { code: 'PC', name: 'Peu Commune',color: '#22c55e' };
-            return { code: 'C', name: 'Commune', color: '#94a3b8' };
-        }
-
-        function openPack() {
-            activePackCards = [];
-            currentCardIndex = 0;
-            
-            document.getElementById('view-shop').classList.add('hidden');
-            document.getElementById('view-pull').classList.remove('hidden');
-            
-            drawNextCardInPack();
-        }
-
-        async function drawNextCardInPack() {
-            if (currentCardIndex >= 5) {
-                showRecap();
-                return;
-            }
-
-            document.getElementById('pull-progress').innerText = `Carte ${currentCardIndex + 1} / 5`;
-            document.getElementById('pull-loading').classList.remove('hidden');
-            document.getElementById('pull-card-box').classList.add('hidden');
-            document.getElementById('btn-next-card').classList.add('hidden');
-
-            try {
-                let res = await fetch('https://fr.wikipedia.org/api/rest_v1/page/random/summary');
-                let data = await res.json();
-
-                let title = data.title || "Article Wikipédia";
-                let desc = data.extract || "Pas de description disponible pour cet article.";
-                let img = (data.thumbnail && data.thumbnail.source) ? data.thumbnail.source : "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&q=80";
-                
-                let rarity = getRandomRarity();
-
-                let card = {
-                    title: title,
-                    desc: desc,
-                    img: img,
-                    rarity: rarity,
-                    atk: Math.floor(1000 + Math.random() * 8500),
-                    def: Math.floor(1000 + Math.random() * 8500)
-                };
-
-                activePackCards.push(card);
-                if (!myCollection.some(c => c.title === card.title)) {
-                    myCollection.push(card);
-                }
-
-                // Affichage
-                document.getElementById('c-title').innerText = card.title;
-                document.getElementById('c-desc').innerText = card.desc;
-                document.getElementById('c-img').src = card.img;
-                document.getElementById('c-atk').innerText = card.atk;
-                document.getElementById('c-def').innerText = card.def;
-
-                let badge = document.getElementById('c-badge');
-                badge.innerText = card.rarity.name;
-                badge.style.background = card.rarity.color;
-
-                let cardBox = document.getElementById('pull-card-box');
-                cardBox.style.borderColor = card.rarity.color;
-
-                document.getElementById('pull-loading').classList.add('hidden');
-                cardBox.classList.remove('hidden');
-                document.getElementById('btn-next-card').classList.remove('hidden');
-
-                currentCardIndex++;
-            } catch(e) {
-                alert("Erreur de connexion Wikipédia, réessai...");
-                drawNextCardInPack();
-            }
-        }
-
-        function showRecap() {
-            document.getElementById('view-pull').classList.add('hidden');
-            document.getElementById('view-recap').classList.remove('hidden');
-
-            let grid = document.getElementById('recap-grid');
-            grid.innerHTML = '';
-
-            activePackCards.forEach(c => {
-                let div = document.createElement('div');
-                div.className = 'mini-card';
-                div.style.borderColor = c.rarity.color;
-                div.innerHTML = `
-                    <img src="${c.img}" class="mini-img" onerror="this.src='https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&q=80'">
-                    <div class="mini-title">${c.title}</div>
-                    <div class="mini-rarity" style="color:${c.rarity.color}">${c.rarity.name}</div>
-                `;
-                grid.appendChild(div);
-            });
-        }
-
-        function renderCollection() {
-            let grid = document.getElementById('collection-grid');
-            let empty = document.getElementById('col-empty');
-            grid.innerHTML = '';
-
-            if (myCollection.length === 0) {
-                empty.classList.remove('hidden');
-                return;
-            }
-            empty.classList.add('hidden');
-
-            myCollection.forEach(c => {
-                let div = document.createElement('div');
-                div.className = 'mini-card';
-                div.style.borderColor = c.rarity.color;
-                div.innerHTML = `
-                    <img src="${c.img}" class="mini-img" onerror="this.src='https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&q=80'">
-                    <div class="mini-title">${c.title}</div>
-                    <div class="mini-rarity" style="color:${c.rarity.color}">${c.rarity.name}</div>
-                `;
-                grid.appendChild(div);
-            });
-        }
-    </script>
-</body>
-</html>
+        const OFFLINE_BACKUP = [
+            { title: "La Joconde", desc: "Tableau de Léonard de Vinci conservé au Musée du Louvre.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/400px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg" },
+            { title: "Tour Eiffel", desc: "Tour de fer puddled de 330 mètres située à Paris.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Tour_Eiffel_Wikimedia_Commons_%28cropped%29.jpg/400px-Tour_Eiffel_Wikimedia_Commons_%28cropped%29.jpg" },
+            { title: "Système solaire", desc: "Système planétaire composé du Soleil 
