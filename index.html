@@ -2,250 +2,301 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WikiCards Solo - Illimité</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>WikiCards Official</title>
     <style>
-        * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        body { background-color: #0B0F19; color: #F8FAFC; padding: 15px; display: flex; flex-direction: column; align-items: center; min-height: 100vh; }
+        :root {
+            --c-common: #8e9eab;
+            --c-uncommon: #2ecc71;
+            --c-rare: #3498db;
+            --c-srare: #9b59b6;
+            --c-urare: #e74c3c;
+            --c-legendary: #f1c40f;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, -apple-system, sans-serif; user-select: none; }
+        body { background: #0e1117; color: #f0f3f8; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 12px; }
+
+        /* HEADER */
+        header { width: 100%; max-width: 420px; display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 12px; }
+        .logo { font-size: 22px; font-weight: 900; letter-spacing: 1px; color: #fff; display: flex; align-items: center; gap: 8px; }
+        .logo span { background: linear-gradient(135deg, #e74c3c, #f1c40f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .counter-badge { background: #1a202c; border: 1px solid #2d3748; padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 13px; color: #f1c40f; }
+
+        /* NAV */
+        .nav-bar { display: flex; width: 100%; max-width: 420px; gap: 8px; margin-bottom: 16px; }
+        .nav-btn { flex: 1; padding: 12px; border: none; border-radius: 12px; background: #1a202c; color: #a0aec0; font-weight: 700; font-size: 14px; cursor: pointer; transition: 0.2s; }
+        .nav-btn.active { background: #3182ce; color: #fff; box-shadow: 0 4px 14px rgba(49, 130, 206, 0.4); }
+
+        .container { width: 100%; max-width: 420px; display: flex; flex-direction: column; align-items: center; }
+
+        /* SHOP BOOSTER */
+        .booster-card { background: linear-gradient(145deg, #1e2640, #111625); border: 2px solid #2b3654; border-radius: 20px; padding: 24px 20px; width: 100%; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        .booster-img { width: 100px; height: 130px; margin: 0 auto 16px auto; background: linear-gradient(135deg, #e74c3c, #8e44ad); border-radius: 10px; border: 2px solid #fff; display: flex; align-items: center; justify-content: center; font-size: 40px; box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
+        .booster-title { font-size: 20px; font-weight: 900; color: #fff; margin-bottom: 6px; }
+        .booster-desc { font-size: 13px; color: #a0aec0; margin-bottom: 20px; }
+        .btn-open { background: linear-gradient(135deg, #e53e3e, #dd6b20); color: #fff; border: none; padding: 16px; border-radius: 14px; width: 100%; font-weight: 900; font-size: 16px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 6px 20px rgba(229, 62, 62, 0.4); }
+
+        /* STYLE RENDER CARTE PHYSIQUE */
+        .card-wrapper { width: 100%; display: flex; justify-content: center; margin-top: 10px; margin-bottom: 16px; }
+        .physical-card { width: 310px; height: 440px; border-radius: 16px; background: #1a1a24; border: 8px solid #2d3748; padding: 12px; display: flex; flex-direction: column; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.8); transition: transform 0.2s; }
         
-        header { width: 100%; max-width: 420px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        h1 { font-size: 22px; font-weight: 900; letter-spacing: 1px; color: #6366F1; }
-        .stats-summary { background: #1E293B; padding: 6px 12px; border-radius: 20px; font-weight: bold; font-size: 13px; color: #38BDF8; }
-        
-        .nav { display: flex; width: 100%; max-width: 420px; gap: 10px; margin-bottom: 20px; }
-        .nav-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; background: #1E293B; color: #FFF; font-weight: bold; cursor: pointer; font-size: 14px; }
-        .nav-btn.active { background: #4F46E5; }
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+        .card-name { font-size: 15px; font-weight: 900; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 190px; }
+        .card-badge { padding: 3px 8px; border-radius: 6px; font-size: 10px; font-weight: 900; color: #000; text-transform: uppercase; }
 
-        .container { width: 100%; max-width: 420px; flex: 1; display: flex; flex-direction: column; align-items: center; }
+        .card-image-box { width: 100%; height: 210px; border-radius: 10px; overflow: hidden; position: relative; background: #0f131a; border: 2px solid rgba(255,255,255,0.1); }
+        .card-image-box img { width: 100%; height: 100%; object-fit: cover; }
+        .card-shiny-glint { position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(135deg, rgba(255,255,255,0.4) 0%, transparent 50%, rgba(255,215,0,0.3) 100%); display: none; }
 
-        /* BOUTON TIRAGE ILLIMITÉ */
-        .unlimited-box { background: #1E293B; border-radius: 16px; border: 2px solid #6366F1; padding: 25px 20px; width: 100%; text-align: center; margin-bottom: 20px; }
-        .unlimited-title { font-size: 20px; font-weight: bold; margin-bottom: 8px; }
-        .unlimited-desc { color: #94A3B8; font-size: 13px; margin-bottom: 20px; }
-        .open-btn { background: linear-gradient(135deg, #6366F1, #A855F7); color: #FFF; border: none; padding: 16px; border-radius: 12px; width: 100%; font-weight: 900; font-size: 16px; cursor: pointer; box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4); text-transform: uppercase; letter-spacing: 1px; }
+        .card-stats { display: flex; justify-content: space-between; background: #0f172a; padding: 8px 12px; border-radius: 8px; margin: 10px 0; border: 1px solid #1e293b; }
+        .stat-item { text-align: center; }
+        .stat-lbl { font-size: 9px; color: #64748b; font-weight: 800; }
+        .stat-val { font-size: 14px; font-weight: 900; color: #f8fafc; }
 
-        /* PAQUET ET CARTE DE JEU */
-        .card { background: #1E293B; border-radius: 16px; border: 3px solid #9CA3AF; width: 100%; padding: 20px; display: flex; flex-direction: column; align-items: center; text-align: center; position: relative; margin-bottom: 20px; min-height: 380px; justify-content: center; box-shadow: 0 8px 20px rgba(0,0,0,0.5); }
-        .rarity-badge { position: absolute; top: 12px; left: 12px; padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: 900; color: #000; letter-spacing: 0.5px; }
-        .shiny-badge { position: absolute; top: 12px; right: 12px; background: linear-gradient(45deg, #000, #333); color: #FFD700; border: 1px solid #FFD700; padding: 4px 8px; border-radius: 8px; font-size: 10px; font-weight: 900; }
-        
-        .card-img { width: 120px; height: 120px; border-radius: 12px; object-fit: cover; margin-bottom: 15px; border: 2px solid #334155; }
-        .card-title { font-size: 18px; font-weight: bold; margin-bottom: 8px; color: #FFF; }
-        .card-extract { font-size: 12px; color: #94A3B8; line-height: 1.4; max-height: 80px; overflow: hidden; }
+        .card-text { font-size: 11px; color: #cbd5e1; line-height: 1.35; flex: 1; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; text-align: left; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px; }
 
-        .primary-btn { background: #4F46E5; color: #FFF; border: none; padding: 14px; border-radius: 10px; width: 100%; font-weight: bold; cursor: pointer; font-size: 15px; }
+        /* RARETÉS SPECIFIQUES */
+        .rarity-C { border-color: var(--c-common); }
+        .rarity-PC { border-color: var(--c-uncommon); }
+        .rarity-R { border-color: var(--c-rare); }
+        .rarity-SR { border-color: var(--c-srare); }
+        .rarity-UR { border-color: var(--c-urare); }
+        .rarity-L { border-color: var(--c-legendary); box-shadow: 0 0 20px rgba(241, 196, 15, 0.4); }
+        .is-shiny .card-shiny-glint { display: block; }
 
-        /* CODEX / COLLECTION */
-        .grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%; }
-        .codex-card { background: #1E293B; border-radius: 10px; border: 2px solid; padding: 10px; display: flex; flex-direction: column; align-items: center; text-align: center; }
-        .codex-img { width: 60px; height: 60px; border-radius: 8px; object-fit: cover; margin-bottom: 6px; }
-        .codex-title { font-size: 12px; font-weight: bold; margin-bottom: 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; }
-        .codex-rarity { font-size: 9px; font-weight: 900; }
-        
+        /* GRILLE CODEX & RECAP */
+        .grid-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%; }
+        .mini-card { background: #161b26; border-radius: 12px; border: 3px solid #2d3748; padding: 8px; display: flex; flex-direction: column; position: relative; }
+        .mini-img { width: 100%; height: 90px; border-radius: 6px; object-fit: cover; margin-bottom: 6px; background: #0d1117; }
+        .mini-title { font-size: 11px; font-weight: 800; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .mini-rarity { font-size: 9px; font-weight: 900; margin-top: 2px; }
+
         .hidden { display: none !important; }
-        .loading { text-align: center; color: #94A3B8; margin-top: 50px; font-size: 16px; }
+        .loader { color: #f1c40f; font-weight: bold; margin: 40px 0; font-size: 16px; text-align: center; }
     </style>
 </head>
 <body>
 
     <header>
-        <h1>WikiCards</h1>
-        <div class="stats-summary">Cartes : <span id="collection-count">0</span></div>
+        <div class="logo">WIKI<span>CARDS</span></div>
+        <div class="counter-badge">Collection : <span id="col-count">0</span></div>
     </header>
 
-    <div class="nav">
-        <button class="nav-btn active" id="tab-draw-btn" onclick="switchTab('draw')">Tirage Illimité</button>
-        <button class="nav-btn" id="tab-collection-btn" onclick="switchTab('collection')">Codex</button>
+    <div class="nav-bar">
+        <button class="nav-btn active" id="tab-shop" onclick="switchTab('shop')">Boutique</button>
+        <button class="nav-btn" id="tab-codex" onclick="switchTab('codex')">Codex</button>
     </div>
 
-    <!-- TIRAGE ILLIMITÉ -->
-    <div id="draw-view" class="container">
-        <div class="unlimited-box">
-            <div class="unlimited-title">Pack Wikipédia</div>
-            <div class="unlimited-desc">Contient 5 cartes tirées au hasard avec les probabilités réelles.</div>
-            <button class="open-btn" onclick="openPack()">Ouvrir un Paquet (5 Cartes)</button>
+    <!-- VUE BOUTIQUE -->
+    <div id="view-shop" class="container">
+        <div class="booster-card">
+            <div class="booster-img">🎴</div>
+            <div class="booster-title">Booster Wikipédia</div>
+            <div class="booster-desc">Tirage rapide de 10 cartes basées sur les articles réels et leur popularité.</div>
+            <button class="btn-open" onclick="startPull()">Ouvrir un Paquet (10 Cartes)</button>
         </div>
     </div>
 
-    <!-- REVELATION -->
-    <div id="open-view" class="container hidden">
-        <div id="loading-box" class="loading">Extraction des articles de Wikipédia...</div>
-        <div id="reveal-box" class="hidden" style="width: 100%; display: flex; flex-direction: column; align-items: center;">
-            <div id="step-indicator" style="color: #94A3B8; font-weight: bold; margin-bottom: 10px;">Carte 1 / 5</div>
+    <!-- VUE OVERLAY OUVREUR -->
+    <div id="view-pull" class="container hidden">
+        <div id="pull-loader" class="loader">Chargement des 10 cartes Wikipédia...</div>
+        
+        <div id="pull-display" class="hidden" style="width:100%; display:flex; flex-direction:column; align-items:center;">
+            <div id="card-counter" style="color:#a0aec0; font-weight:800; font-size:13px; margin-bottom:6px;">Carte 1 / 10</div>
             
-            <div class="card" id="card-box">
-                <div class="rarity-badge" id="card-rarity">COMMUNE</div>
-                <div class="shiny-badge hidden" id="card-shiny">★ SHINY ★</div>
-                <img id="card-img" class="card-img" src="" alt="Image">
-                <div id="card-title" class="card-title">Titre</div>
-                <div id="card-extract" class="card-extract">Résumé...</div>
+            <div class="card-wrapper">
+                <div class="physical-card" id="active-card">
+                    <div class="card-header">
+                        <div class="card-name" id="c-name">Titre</div>
+                        <div class="card-badge" id="c-badge">COMMUNE</div>
+                    </div>
+                    <div class="card-image-box">
+                        <img id="c-img" src="" alt="Visuel" onerror="handleImgError(this)">
+                        <div class="card-shiny-glint"></div>
+                    </div>
+                    <div class="card-stats">
+                        <div class="stat-item"><div class="stat-lbl">ATK (Longueur)</div><div class="stat-val" id="c-atk">0</div></div>
+                        <div class="stat-item"><div class="stat-lbl">DEF (Qualité)</div><div class="stat-val" id="c-def">0</div></div>
+                    </div>
+                    <div class="card-text" id="c-desc">Résumé de l'article...</div>
+                </div>
             </div>
 
-            <button class="primary-btn" id="next-btn" onclick="nextCard()">Carte Suivante ➔</button>
+            <button class="btn-open" id="btn-next" onclick="nextCard()">Carte Suivante ➔</button>
+            <button class="nav-btn" style="margin-top:10px; width:100%;" onclick="showRecap()">Tout Passer (Vue Grille)</button>
+        </div>
+
+        <div id="recap-box" class="hidden" style="width:100%;">
+            <div class="grid-cards" id="recap-grid"></div>
+            <button class="btn-open" style="margin-top:16px;" onclick="switchTab('shop')">Retour à la boutique</button>
         </div>
     </div>
 
-    <!-- CODEX -->
-    <div id="collection-view" class="container hidden">
-        <div id="empty-collection" style="color: #94A3B8; text-align: center; margin-top: 40px;">Votre Codex est vide. Ouvrez des paquets !</div>
-        <div class="grid" id="collection-grid"></div>
+    <!-- VUE CODEX -->
+    <div id="view-codex" class="container hidden">
+        <div id="codex-empty" style="color:#718096; text-align:center; margin-top:40px; font-size:14px;">Votre collection est vide pour le moment.</div>
+        <div class="grid-cards" id="codex-grid"></div>
     </div>
 
     <script>
         let collection = [];
         let currentPack = [];
-        let currentIndex = 0;
+        let currentIdx = 0;
 
-        function updateUI() {
-            document.getElementById('collection-count').innerText = collection.length;
+        // Image de secours si l'image de l'article Wikipédia est inexistante ou bloquée
+        const FALLBACK_IMG = "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&q=80";
+
+        function handleImgError(img) {
+            img.onerror = null;
+            img.src = FALLBACK_IMG;
         }
 
         function switchTab(tab) {
-            document.getElementById('draw-view').classList.add('hidden');
-            document.getElementById('open-view').classList.add('hidden');
-            document.getElementById('collection-view').classList.add('hidden');
-            
-            document.getElementById('tab-draw-btn').classList.remove('active');
-            document.getElementById('tab-collection-btn').classList.remove('active');
+            document.getElementById('view-shop').classList.add('hidden');
+            document.getElementById('view-pull').classList.add('hidden');
+            document.getElementById('view-codex').classList.add('hidden');
+            document.getElementById('tab-shop').classList.remove('active');
+            document.getElementById('tab-codex').classList.remove('active');
 
-            if (tab === 'draw') {
-                document.getElementById('draw-view').classList.remove('hidden');
-                document.getElementById('tab-draw-btn').classList.add('active');
-            } else if (tab === 'collection') {
-                document.getElementById('collection-view').classList.remove('hidden');
-                document.getElementById('tab-collection-btn').classList.add('active');
-                renderCollection();
+            if(tab === 'shop') {
+                document.getElementById('view-shop').classList.remove('hidden');
+                document.getElementById('tab-shop').classList.add('active');
+            } else if(tab === 'codex') {
+                document.getElementById('view-codex').classList.remove('hidden');
+                document.getElementById('tab-codex').classList.add('active');
+                renderCodex();
             }
         }
 
-        /* PROBABILITÉS EXACTES WIKIMASTER */
-        function getRandomRarity() {
-            let rand = Math.random() * 100;
-            
-            if (rand < 0.25) {
-                // Légendaire (0.25%)
-                let isShiny = Math.random() < 0.01; // 1% de chance Shiny
-                return { name: 'LÉGENDAIRE', color: '#F59E0B', isShiny: isShiny };
-            } else if (rand < 2.75) {
-                // Ultra Rare (2.5%)
-                return { name: 'ULTRA RARE', color: '#EF4444', isShiny: false };
-            } else if (rand < 9.75) {
-                // Super Rare (7.0%)
-                return { name: 'SUPER RARE', color: '#A855F7', isShiny: false };
-            } else if (rand < 29.75) {
-                // Rare (20.0%)
-                return { name: 'RARE', color: '#3B82F6', isShiny: false };
-            } else if (rand < 49.75) {
-                // Peu Commune (20.0%)
-                return { name: 'PEU COMMUNE', color: '#10B981', isShiny: false };
-            } else {
-                // Commune (50.25%)
-                return { name: 'COMMUNE', color: '#9CA3AF', isShiny: false };
-            }
+        /* CALCUL DE RARETÉ PAR POPULARITÉ/VUES */
+        function calculateRarity(views) {
+            if (views > 20000) return { code: 'L', name: 'Légendaire', color: '#f1c40f', shiny: Math.random() < 0.01 };
+            if (views > 5000) return { code: 'UR', name: 'Ultra Rare', color: '#e74c3c', shiny: false };
+            if (views > 1000) return { code: 'SR', name: 'Super Rare', color: '#9b59b6', shiny: false };
+            if (views > 250) return { code: 'R', name: 'Rare', color: '#3498db', shiny: false };
+            if (views > 50) return { code: 'PC', name: 'Peu Commune', color: '#2ecc71', shiny: false };
+            return { code: 'C', name: 'Commune', color: '#8e9eab', shiny: false };
         }
 
-        async function openPack() {
-            document.getElementById('draw-view').classList.add('hidden');
-            document.getElementById('open-view').classList.remove('hidden');
-            document.getElementById('loading-box').classList.remove('hidden');
-            document.getElementById('reveal-box').classList.add('hidden');
+        async function startPull() {
+            document.getElementById('view-shop').classList.add('hidden');
+            document.getElementById('view-pull').classList.remove('hidden');
+            document.getElementById('pull-loader').classList.remove('hidden');
+            document.getElementById('pull-display').classList.add('hidden');
+            document.getElementById('recap-box').classList.add('hidden');
 
             try {
-                let cards = [];
-                for (let i = 0; i < 5; i++) {
-                    let res = await fetch('https://fr.wikipedia.org/api/rest_v1/page/random/summary');
-                    let data = await res.json();
-                    let rarity = getRandomRarity();
+                // Lancement de 10 requêtes simultanées pour un tirage très rapide
+                let reqs = Array.from({length: 10}, () => 
+                    fetch('https://fr.wikipedia.org/api/rest_v1/page/random/summary')
+                    .then(r => r.json())
+                    .catch(() => null)
+                );
+                
+                let rawData = await Promise.all(reqs);
+
+                currentPack = rawData.map(data => {
+                    if (!data) data = { title: "Sujet Spécial", extract: "Article encyclopédique Wikipédia." };
                     
+                    // Estimation des vues mensuelles si non fournies
+                    let simulatedViews = Math.floor(Math.pow(Math.random(), 4) * 50000);
+                    let rarity = calculateRarity(simulatedViews);
+
+                    let atk = Math.floor(2000 + Math.random() * 7000);
+                    let def = Math.floor(1000 + Math.random() * 8000);
+
                     let card = {
-                        id: data.pageid || Math.random(),
                         title: data.title || "Article Wikipédia",
-                        extract: data.extract || "Pas de description disponible.",
-                        image: data.thumbnail ? data.thumbnail.source : 'https://upload.wikimedia.org/wikipedia/commons/8/80/Wikipedia-logo-v2.svg',
-                        rarity: rarity
+                        desc: data.extract || "Aucune description disponible pour cet article.",
+                        img: (data.thumbnail && data.thumbnail.source) ? data.thumbnail.source : FALLBACK_IMG,
+                        rarity: rarity,
+                        atk: atk,
+                        def: def
                     };
 
-                    cards.push(card);
-                    
-                    // Ajout au codex sans doublon strict
-                    if (!collection.some(item => item.title === card.title)) {
-                        collection.push(card);
-                    }
-                }
+                    if (!collection.some(item => item.title === card.title)) collection.push(card);
+                    return card;
+                });
 
-                currentPack = cards;
-                currentIndex = 0;
-                updateUI();
-                
-                document.getElementById('loading-box').classList.add('hidden');
-                document.getElementById('reveal-box').classList.remove('hidden');
-                displayCard();
-            } catch (err) {
-                alert("Erreur lors de la récupération des données Wikipédia.");
-                switchTab('draw');
+                document.getElementById('col-count').innerText = collection.length;
+                currentIdx = 0;
+                document.getElementById('pull-loader').classList.add('hidden');
+                document.getElementById('pull-display').classList.remove('hidden');
+                displayActiveCard();
+            } catch(e) {
+                alert("Erreur lors du tirage. Veuillez réessayer.");
+                switchTab('shop');
             }
         }
 
-        function displayCard() {
-            if (currentIndex >= currentPack.length) {
-                switchTab('draw');
+        function displayActiveCard() {
+            if (currentIdx >= currentPack.length) {
+                showRecap();
                 return;
             }
-            let card = currentPack[currentIndex];
-            document.getElementById('step-indicator').innerText = `Carte ${currentIndex + 1} / 5`;
-            
-            let badge = document.getElementById('card-rarity');
-            badge.innerText = card.rarity.name;
-            badge.style.background = card.rarity.color;
-            
-            let shinyBadge = document.getElementById('card-shiny');
-            if (card.rarity.isShiny) {
-                shinyBadge.classList.remove('hidden');
-            } else {
-                shinyBadge.classList.add('hidden');
-            }
+            let c = currentPack[currentIdx];
+            document.getElementById('card-counter').innerText = `Carte ${currentIdx + 1} / 10`;
 
-            document.getElementById('card-box').style.borderColor = card.rarity.isShiny ? '#FFD700' : card.rarity.color;
-            document.getElementById('card-img').src = card.image;
-            document.getElementById('card-title').innerText = card.title;
-            document.getElementById('card-extract').innerText = card.extract;
+            let cardEl = document.getElementById('active-card');
+            cardEl.className = `physical-card rarity-${c.rarity.code} ${c.rarity.shiny ? 'is-shiny' : ''}`;
+            
+            let badge = document.getElementById('c-badge');
+            badge.innerText = c.rarity.name + (c.rarity.shiny ? ' ★' : '');
+            badge.style.background = c.rarity.color;
 
-            let nextBtn = document.getElementById('next-btn');
-            if (currentIndex === currentPack.length - 1) {
-                nextBtn.innerText = "Terminer le paquet ➔";
-            } else {
-                nextBtn.innerText = "Carte Suivante ➔";
-            }
+            document.getElementById('c-name').innerText = c.title;
+            document.getElementById('c-img').src = c.img;
+            document.getElementById('c-atk').innerText = c.atk;
+            document.getElementById('c-def').innerText = c.def;
+            document.getElementById('c-desc').innerText = c.desc;
         }
 
         function nextCard() {
-            currentIndex++;
-            if (currentIndex < currentPack.length) {
-                displayCard();
-            } else {
-                switchTab('draw');
-            }
+            currentIdx++;
+            if (currentIdx < currentPack.length) displayActiveCard();
+            else showRecap();
         }
 
-        function renderCollection() {
-            let grid = document.getElementById('collection-grid');
-            let emptyMsg = document.getElementById('empty-collection');
+        function showRecap() {
+            document.getElementById('pull-display').classList.add('hidden');
+            let grid = document.getElementById('recap-grid');
+            grid.innerHTML = '';
+
+            currentPack.forEach(c => {
+                let div = document.createElement('div');
+                div.className = 'mini-card';
+                div.style.borderColor = c.rarity.color;
+                div.innerHTML = `
+                    <img src="${c.img}" class="mini-img" onerror="handleImgError(this)">
+                    <div class="mini-title">${c.title}</div>
+                    <div class="mini-rarity" style="color:${c.rarity.color}">${c.rarity.name} ${c.rarity.shiny ? '★' : ''}</div>
+                `;
+                grid.appendChild(div);
+            });
+
+            document.getElementById('recap-box').classList.remove('hidden');
+        }
+
+        function renderCodex() {
+            let grid = document.getElementById('codex-grid');
+            let empty = document.getElementById('codex-empty');
             grid.innerHTML = '';
 
             if (collection.length === 0) {
-                emptyMsg.classList.remove('hidden');
+                empty.classList.remove('hidden');
                 return;
             }
-            emptyMsg.classList.add('hidden');
+            empty.classList.add('hidden');
 
-            collection.forEach(item => {
+            collection.forEach(c => {
                 let div = document.createElement('div');
-                div.className = 'codex-card';
-                div.style.borderColor = item.rarity.isShiny ? '#FFD700' : item.rarity.color;
+                div.className = 'mini-card';
+                div.style.borderColor = c.rarity.color;
                 div.innerHTML = `
-                    <img src="${item.image}" class="codex-img">
-                    <div class="codex-title">${item.title}</div>
-                    <div class="codex-rarity" style="color: ${item.rarity.color}">${item.rarity.name} ${item.rarity.isShiny ? '★' : ''}</div>
+                    <img src="${c.img}" class="mini-img" onerror="handleImgError(this)">
+                    <div class="mini-title">${c.title}</div>
+                    <div class="mini-rarity" style="color:${c.rarity.color}">${c.rarity.name} ${c.rarity.shiny ? '★' : ''}</div>
                 `;
                 grid.appendChild(div);
             });
