@@ -1,4 +1,4 @@
-name: Build HTML to Android APk
+name: Build Android APK
 
 on:
   push:
@@ -13,15 +13,29 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Build Web App to APK
-        uses: kimhuilim/web-to-app-action@v1.0.0
+      - name: Setup Java JDK
+        uses: actions/setup-java@v4
         with:
-          build-folder-path: './'
-          app-name: 'WikiCards'
-          output-folder-path: 'apk/'
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install Cordova & Build APK
+        run: |
+          npm install -g cordova
+          cordova create myapp com.wikicards.app WikiCards
+          cd myapp
+          rm -rf www/*
+          cp ../index.html www/index.html
+          cordova platform add android
+          cordova build android --debug
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: WikiCards-APK
-          path: apk/*.apk
+          path: myapp/platforms/android/app/build/outputs/apk/debug/app-debug.apk
