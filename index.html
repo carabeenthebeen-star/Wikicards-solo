@@ -17,29 +17,25 @@
         * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', Roboto, -apple-system, sans-serif; user-select: none; }
         body { background: #0e1117; color: #f0f3f8; min-height: 100vh; display: flex; flex-direction: column; align-items: center; padding: 12px; }
 
-        /* HEADER */
         header { width: 100%; max-width: 420px; display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 12px; }
         .logo { font-size: 22px; font-weight: 900; letter-spacing: 1px; color: #fff; display: flex; align-items: center; gap: 8px; }
         .logo span { background: linear-gradient(135deg, #e74c3c, #f1c40f); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
         .counter-badge { background: #1a202c; border: 1px solid #2d3748; padding: 6px 14px; border-radius: 20px; font-weight: 800; font-size: 13px; color: #f1c40f; }
 
-        /* NAV */
         .nav-bar { display: flex; width: 100%; max-width: 420px; gap: 8px; margin-bottom: 16px; }
         .nav-btn { flex: 1; padding: 12px; border: none; border-radius: 12px; background: #1a202c; color: #a0aec0; font-weight: 700; font-size: 14px; cursor: pointer; transition: 0.2s; }
         .nav-btn.active { background: #3182ce; color: #fff; box-shadow: 0 4px 14px rgba(49, 130, 206, 0.4); }
 
         .container { width: 100%; max-width: 420px; display: flex; flex-direction: column; align-items: center; }
 
-        /* SHOP BOOSTER */
         .booster-card { background: linear-gradient(145deg, #1e2640, #111625); border: 2px solid #2b3654; border-radius: 20px; padding: 24px 20px; width: 100%; text-align: center; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
         .booster-img { width: 100px; height: 130px; margin: 0 auto 16px auto; background: linear-gradient(135deg, #e74c3c, #8e44ad); border-radius: 10px; border: 2px solid #fff; display: flex; align-items: center; justify-content: center; font-size: 40px; box-shadow: 0 8px 20px rgba(0,0,0,0.4); }
         .booster-title { font-size: 20px; font-weight: 900; color: #fff; margin-bottom: 6px; }
         .booster-desc { font-size: 13px; color: #a0aec0; margin-bottom: 20px; }
         .btn-open { background: linear-gradient(135deg, #e53e3e, #dd6b20); color: #fff; border: none; padding: 16px; border-radius: 14px; width: 100%; font-weight: 900; font-size: 16px; cursor: pointer; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 6px 20px rgba(229, 62, 62, 0.4); }
 
-        /* STYLE RENDER CARTE PHYSIQUE */
         .card-wrapper { width: 100%; display: flex; justify-content: center; margin-top: 10px; margin-bottom: 16px; }
-        .physical-card { width: 310px; height: 440px; border-radius: 16px; background: #1a1a24; border: 8px solid #2d3748; padding: 12px; display: flex; flex-direction: column; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.8); transition: transform 0.2s; }
+        .physical-card { width: 310px; height: 440px; border-radius: 16px; background: #1a1a24; border: 8px solid #2d3748; padding: 12px; display: flex; flex-direction: column; position: relative; box-shadow: 0 15px 35px rgba(0,0,0,0.8); }
         
         .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
         .card-name { font-size: 15px; font-weight: 900; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 190px; }
@@ -56,7 +52,6 @@
 
         .card-text { font-size: 11px; color: #cbd5e1; line-height: 1.35; flex: 1; overflow: hidden; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; text-align: left; background: rgba(0,0,0,0.2); padding: 8px; border-radius: 6px; }
 
-        /* RARETÉS SPECIFIQUES */
         .rarity-C { border-color: var(--c-common); }
         .rarity-PC { border-color: var(--c-uncommon); }
         .rarity-R { border-color: var(--c-rare); }
@@ -65,7 +60,6 @@
         .rarity-L { border-color: var(--c-legendary); box-shadow: 0 0 20px rgba(241, 196, 15, 0.4); }
         .is-shiny .card-shiny-glint { display: block; }
 
-        /* GRILLE CODEX & RECAP */
         .grid-cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; width: 100%; }
         .mini-card { background: #161b26; border-radius: 12px; border: 3px solid #2d3748; padding: 8px; display: flex; flex-direction: column; position: relative; }
         .mini-img { width: 100%; height: 90px; border-radius: 6px; object-fit: cover; margin-bottom: 6px; background: #0d1117; }
@@ -88,19 +82,17 @@
         <button class="nav-btn" id="tab-codex" onclick="switchTab('codex')">Codex</button>
     </div>
 
-    <!-- VUE BOUTIQUE -->
     <div id="view-shop" class="container">
         <div class="booster-card">
             <div class="booster-img">🎴</div>
             <div class="booster-title">Booster Wikipédia</div>
-            <div class="booster-desc">Tirage rapide de 10 cartes basées sur les articles réels et leur popularité.</div>
+            <div class="booster-desc">Tirage de 10 cartes variées avec images garanties et raretés équilibrées.</div>
             <button class="btn-open" onclick="startPull()">Ouvrir un Paquet (10 Cartes)</button>
         </div>
     </div>
 
-    <!-- VUE OVERLAY OUVREUR -->
     <div id="view-pull" class="container hidden">
-        <div id="pull-loader" class="loader">Chargement des 10 cartes Wikipédia...</div>
+        <div id="pull-loader" class="loader">Tirage des 10 cartes en cours...</div>
         
         <div id="pull-display" class="hidden" style="width:100%; display:flex; flex-direction:column; align-items:center;">
             <div id="card-counter" style="color:#a0aec0; font-weight:800; font-size:13px; margin-bottom:6px;">Carte 1 / 10</div>
@@ -112,14 +104,14 @@
                         <div class="card-badge" id="c-badge">COMMUNE</div>
                     </div>
                     <div class="card-image-box">
-                        <img id="c-img" src="" alt="Visuel" onerror="handleImgError(this)">
+                        <img id="c-img" src="" alt="Visuel" onerror="this.src='https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&q=80'">
                         <div class="card-shiny-glint"></div>
                     </div>
                     <div class="card-stats">
-                        <div class="stat-item"><div class="stat-lbl">ATK (Longueur)</div><div class="stat-val" id="c-atk">0</div></div>
-                        <div class="stat-item"><div class="stat-lbl">DEF (Qualité)</div><div class="stat-val" id="c-def">0</div></div>
+                        <div class="stat-item"><div class="stat-lbl">ATK</div><div class="stat-val" id="c-atk">0</div></div>
+                        <div class="stat-item"><div class="stat-lbl">DEF</div><div class="stat-val" id="c-def">0</div></div>
                     </div>
-                    <div class="card-text" id="c-desc">Résumé de l'article...</div>
+                    <div class="card-text" id="c-desc">Résumé...</div>
                 </div>
             </div>
 
@@ -133,7 +125,6 @@
         </div>
     </div>
 
-    <!-- VUE CODEX -->
     <div id="view-codex" class="container hidden">
         <div id="codex-empty" style="color:#718096; text-align:center; margin-top:40px; font-size:14px;">Votre collection est vide pour le moment.</div>
         <div class="grid-cards" id="codex-grid"></div>
@@ -143,14 +134,6 @@
         let collection = [];
         let currentPack = [];
         let currentIdx = 0;
-
-        // Image de secours si l'image de l'article Wikipédia est inexistante ou bloquée
-        const FALLBACK_IMG = "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&q=80";
-
-        function handleImgError(img) {
-            img.onerror = null;
-            img.src = FALLBACK_IMG;
-        }
 
         function switchTab(tab) {
             document.getElementById('view-shop').classList.add('hidden');
@@ -169,13 +152,12 @@
             }
         }
 
-        /* CALCUL DE RARETÉ PAR POPULARITÉ/VUES */
-        function calculateRarity(views) {
-            if (views > 20000) return { code: 'L', name: 'Légendaire', color: '#f1c40f', shiny: Math.random() < 0.01 };
-            if (views > 5000) return { code: 'UR', name: 'Ultra Rare', color: '#e74c3c', shiny: false };
-            if (views > 1000) return { code: 'SR', name: 'Super Rare', color: '#9b59b6', shiny: false };
-            if (views > 250) return { code: 'R', name: 'Rare', color: '#3498db', shiny: false };
-            if (views > 50) return { code: 'PC', name: 'Peu Commune', color: '#2ecc71', shiny: false };
+        function calculateRarity(score) {
+            if (score > 85) return { code: 'L', name: 'Légendaire', color: '#f1c40f', shiny: Math.random() < 0.05 };
+            if (score > 70) return { code: 'UR', name: 'Ultra Rare', color: '#e74c3c', shiny: false };
+            if (score > 50) return { code: 'SR', name: 'Super Rare', color: '#9b59b6', shiny: false };
+            if (score > 30) return { code: 'R', name: 'Rare', color: '#3498db', shiny: false };
+            if (score > 15) return { code: 'PC', name: 'Peu Commune', color: '#2ecc71', shiny: false };
             return { code: 'C', name: 'Commune', color: '#8e9eab', shiny: false };
         }
 
@@ -186,38 +168,34 @@
             document.getElementById('pull-display').classList.add('hidden');
             document.getElementById('recap-box').classList.add('hidden');
 
+            currentPack = [];
+
             try {
-                // Lancement de 10 requêtes simultanées pour un tirage très rapide
-                let reqs = Array.from({length: 10}, () => 
-                    fetch('https://fr.wikipedia.org/api/rest_v1/page/random/summary')
-                    .then(r => r.json())
-                    .catch(() => null)
-                );
-                
-                let rawData = await Promise.all(reqs);
-
-                currentPack = rawData.map(data => {
-                    if (!data) data = { title: "Sujet Spécial", extract: "Article encyclopédique Wikipédia." };
+                for (let i = 0; i < 10; i++) {
+                    let res = await fetch('https://fr.wikipedia.org/api/rest_v1/page/random/summary');
+                    let data = await res.json();
                     
-                    // Estimation des vues mensuelles si non fournies
-                    let simulatedViews = Math.floor(Math.pow(Math.random(), 4) * 50000);
-                    let rarity = calculateRarity(simulatedViews);
+                    let title = data.title || "Article Wikipédia";
+                    let desc = data.extract || "Pas de description disponible.";
+                    let img = (data.thumbnail && data.thumbnail.source) ? data.thumbnail.source : "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&q=80";
 
-                    let atk = Math.floor(2000 + Math.random() * 7000);
-                    let def = Math.floor(1000 + Math.random() * 8000);
+                    let score = Math.floor(Math.random() * 100);
+                    let rarity = calculateRarity(score);
 
                     let card = {
-                        title: data.title || "Article Wikipédia",
-                        desc: data.extract || "Aucune description disponible pour cet article.",
-                        img: (data.thumbnail && data.thumbnail.source) ? data.thumbnail.source : FALLBACK_IMG,
+                        title: title,
+                        desc: desc,
+                        img: img,
                         rarity: rarity,
-                        atk: atk,
-                        def: def
+                        atk: Math.floor(1000 + Math.random() * 8000),
+                        def: Math.floor(1000 + Math.random() * 8000)
                     };
 
-                    if (!collection.some(item => item.title === card.title)) collection.push(card);
-                    return card;
-                });
+                    currentPack.push(card);
+                    if (!collection.some(item => item.title === card.title)) {
+                        collection.push(card);
+                    }
+                }
 
                 document.getElementById('col-count').innerText = collection.length;
                 currentIdx = 0;
@@ -225,7 +203,7 @@
                 document.getElementById('pull-display').classList.remove('hidden');
                 displayActiveCard();
             } catch(e) {
-                alert("Erreur lors du tirage. Veuillez réessayer.");
+                alert("Erreur de réseau. Veuillez réessayer.");
                 switchTab('shop');
             }
         }
@@ -268,7 +246,7 @@
                 div.className = 'mini-card';
                 div.style.borderColor = c.rarity.color;
                 div.innerHTML = `
-                    <img src="${c.img}" class="mini-img" onerror="handleImgError(this)">
+                    <img src="${c.img}" class="mini-img" onerror="this.src='https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&q=80'">
                     <div class="mini-title">${c.title}</div>
                     <div class="mini-rarity" style="color:${c.rarity.color}">${c.rarity.name} ${c.rarity.shiny ? '★' : ''}</div>
                 `;
@@ -294,7 +272,7 @@
                 div.className = 'mini-card';
                 div.style.borderColor = c.rarity.color;
                 div.innerHTML = `
-                    <img src="${c.img}" class="mini-img" onerror="handleImgError(this)">
+                    <img src="${c.img}" class="mini-img" onerror="this.src='https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&q=80'">
                     <div class="mini-title">${c.title}</div>
                     <div class="mini-rarity" style="color:${c.rarity.color}">${c.rarity.name} ${c.rarity.shiny ? '★' : ''}</div>
                 `;
