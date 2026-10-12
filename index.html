@@ -13,9 +13,6 @@
             --accent-green-dark: #15803d;
             --text-primary: #ffffff;
             --text-secondary: #8a94a6;
-            --badge-warning-bg: #1c150c;
-            --badge-warning-border: #3d2e17;
-            --badge-warning-text: #eab308;
 
             --c-commune: #94a3b8;
             --c-peu-commune: #22c55e;
@@ -46,7 +43,6 @@
             padding-bottom: 75px;
         }
 
-        /* HEADER */
         header {
             width: 100%;
             max-width: 420px;
@@ -69,7 +65,6 @@
             color: var(--accent-green);
             font-weight: 800;
             font-size: 14px;
-            letter-spacing: 0.3px;
         }
 
         .currency-icon {
@@ -97,7 +92,6 @@
             justify-content: center;
             color: #fff;
             font-size: 16px;
-            cursor: pointer;
         }
 
         .notif-badge {
@@ -117,7 +111,6 @@
             border: 2px solid var(--bg-color);
         }
 
-        /* MAIN CONTAINER */
         .main-container {
             width: 100%;
             max-width: 420px;
@@ -133,51 +126,17 @@
             font-weight: 900;
             text-align: center;
             margin-top: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             color: #ffffff;
-            letter-spacing: -0.5px;
         }
 
-        /* WARNING BANNER */
-        .banner-warning {
-            width: 100%;
-            background: var(--badge-warning-bg);
-            border: 1px solid var(--badge-warning-border);
-            border-radius: 16px;
-            padding: 16px 18px;
-            margin-bottom: 24px;
-        }
-
-        .banner-title {
-            color: var(--badge-warning-text);
-            font-size: 15px;
-            font-weight: 800;
-            margin-bottom: 8px;
-        }
-
-        .banner-desc {
-            color: #d1d5db;
-            font-size: 12.5px;
-            line-height: 1.45;
-            margin-bottom: 12px;
-        }
-
-        .banner-link {
-            color: var(--badge-warning-text);
-            font-size: 13px;
-            font-weight: 700;
-            text-decoration: underline;
-            cursor: pointer;
-        }
-
-        /* BOOSTER SECTION */
         .booster-area {
             display: flex;
             flex-direction: column;
             align-items: center;
             width: 100%;
             flex: 1;
-            justify-content: space-between;
+            justify-content: center;
             padding-bottom: 20px;
         }
 
@@ -194,17 +153,16 @@
             font-size: 13.5px;
             font-weight: 700;
             text-decoration: none;
-            margin-bottom: 28px;
+            margin-bottom: 25px;
             cursor: pointer;
         }
 
-        /* GRAPHISME SACHET/PACK WIKIMASTER */
         .booster-pack {
             width: 190px;
             height: 270px;
             background: linear-gradient(175deg, #ffffff 0%, #e2e8f0 70%, #cbd5e1 100%);
             border-radius: 12px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8), 0 0 20px rgba(255,255,255,0.05);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
             position: relative;
             display: flex;
             flex-direction: column;
@@ -212,6 +170,13 @@
             justify-content: center;
             overflow: hidden;
             border: 1px solid rgba(255,255,255,0.4);
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: transform 0.15s ease;
+        }
+
+        .booster-pack:active {
+            transform: scale(0.96);
         }
 
         .booster-pack::before, .booster-pack::after {
@@ -244,7 +209,6 @@
             color: #ffffff;
             z-index: 2;
             box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            position: relative;
         }
 
         .wm-logo-svg {
@@ -262,26 +226,16 @@
             cursor: pointer;
             text-align: center;
             letter-spacing: 0.5px;
-            margin-top: 20px;
-            transition: transform 0.1s, opacity 0.2s;
+            padding: 10px 20px;
         }
 
-        .btn-open-main:active {
-            transform: scale(0.95);
-        }
-
-        .btn-open-main:disabled {
-            opacity: 0.4;
-            cursor: not-allowed;
-        }
-
-        /* FLIP CARD 3D */
         .card-stage {
             perspective: 1000px;
             width: 290px;
             height: 410px;
-            margin-top: 15px;
+            margin-top: 10px;
             margin-bottom: 20px;
+            cursor: pointer;
         }
 
         .card-flipper {
@@ -290,7 +244,6 @@
             position: relative;
             transform-style: preserve-3d;
             transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            cursor: pointer;
         }
 
         .card-flipper.flipped {
@@ -311,7 +264,6 @@
             box-shadow: 0 16px 36px rgba(0,0,0,0.9);
         }
 
-        /* BACK FACE */
         .card-back {
             background: linear-gradient(145deg, #0d1017 0%, #1a2130 100%);
             display: flex;
@@ -329,10 +281,8 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 0 25px rgba(34, 197, 94, 0.25);
         }
 
-        /* FRONT FACE */
         .card-front {
             transform: rotateY(180deg);
         }
@@ -370,7 +320,6 @@
             border-radius: 10px;
             overflow: hidden;
             margin-bottom: 8px;
-            border: 1px solid rgba(255,255,255,0.06);
         }
 
         .card-img-container img {
@@ -414,10 +363,8 @@
             font-size: 15px;
             cursor: pointer;
             text-transform: uppercase;
-            letter-spacing: 0.5px;
         }
 
-        /* GRID SYSTEM */
         .grid-cards {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -459,7 +406,6 @@
             text-transform: uppercase;
         }
 
-        /* BOTTOM NAVBAR */
         nav.bottom-nav {
             position: fixed;
             bottom: 0;
@@ -503,7 +449,6 @@
 </head>
 <body>
 
-    <!-- HEADER -->
     <header>
         <div class="currency-badge">
             <div class="currency-icon">W</div>
@@ -515,17 +460,9 @@
         </div>
     </header>
 
-    <!-- SECTION SHOP -->
+    <!-- SHOP -->
     <div id="view-shop" class="main-container">
         <h1 class="title-main">Ouvrir un paquet</h1>
-
-        <div class="banner-warning">
-            <div class="banner-title">Compte suspendu définitivement</div>
-            <div class="banner-desc">
-                Tes activités sont restreintes (paquets, échanges, marché, messages, etc.). Le détail de la sanction est dans tes notifications. Si tu penses qu'il s'agit d'une erreur, ouvre un ticket de support sur notre Discord.
-            </div>
-            <a class="banner-link">Ouvrir un ticket sur Discord</a>
-        </div>
 
         <div class="booster-area">
             <div style="display: flex; flex-direction: column; align-items: center;">
@@ -533,9 +470,9 @@
                 <a class="booster-link">Comment ça marche ?</a>
             </div>
 
-            <div class="booster-pack">
+            <!-- Clic direct sur le paquet de cartes -->
+            <div class="booster-pack" onclick="openBoosterPack()">
                 <svg class="puzzle-pattern" viewBox="0 0 100 100" preserveAspectRatio="none">
-                    <path d="M10,10 Q20,0 30,10 T50,10" fill="none" stroke="#e2e8f0" stroke-width="2" opacity="0.5"/>
                     <circle cx="20" cy="30" r="12" fill="#ef4444" opacity="0.3"/>
                     <circle cx="80" cy="40" r="15" fill="#3b82f6" opacity="0.3"/>
                     <circle cx="30" cy="80" r="14" fill="#eab308" opacity="0.3"/>
@@ -549,17 +486,16 @@
                 </div>
             </div>
 
-            <button class="btn-open-main" id="btn-open-pack" onclick="openBoosterPack()">Ouvrir</button>
+            <button class="btn-open-main" onclick="openBoosterPack()">Ouvrir</button>
         </div>
     </div>
 
-    <!-- SECTION PULL CARTE PAR CARTE -->
+    <!-- PULL -->
     <div id="view-pull" class="main-container hidden">
         <div id="pull-progress" style="font-size: 14px; font-weight: 700; color: var(--text-secondary); margin-bottom: 5px;">Carte 1 / 5</div>
 
         <div class="card-stage" onclick="flipActiveCard()">
             <div class="card-flipper" id="card-flipper">
-                <!-- DOS CACHÉ -->
                 <div class="card-face card-back">
                     <div class="card-back-logo">
                         <svg class="wm-logo-svg" viewBox="0 0 24 24" style="fill: var(--accent-green);">
@@ -567,7 +503,6 @@
                         </svg>
                     </div>
                 </div>
-                <!-- RECTO -->
                 <div class="card-face card-front" id="card-front-box">
                     <div class="card-header-flex">
                         <div class="card-title-txt" id="c-title">...</div>
@@ -588,21 +523,21 @@
         <button class="btn-action-primary" id="btn-next-step" onclick="handleNextStep()">Révéler la carte</button>
     </div>
 
-    <!-- SECTION RECAP -->
+    <!-- RECAP -->
     <div id="view-recap" class="main-container hidden">
         <h1 class="title-main" style="font-size: 22px; margin-bottom: 16px;">Tirage terminé !</h1>
         <div class="grid-cards" id="recap-grid" style="margin-bottom: 20px;"></div>
         <button class="btn-action-primary" onclick="switchTab('shop')">Continuer</button>
     </div>
 
-    <!-- SECTION COLLECTION -->
+    <!-- COLLECTION -->
     <div id="view-collection" class="main-container hidden">
         <h1 class="title-main" style="font-size: 22px; margin-bottom: 16px;">Ma Collection</h1>
         <div id="col-empty" style="color: var(--text-secondary); margin-top: 30px; text-align:center;">Aucune carte acquise.</div>
         <div class="grid-cards" id="collection-grid"></div>
     </div>
 
-    <!-- NAVBAR BOTTOM -->
+    <!-- NAVBAR -->
     <nav class="bottom-nav">
         <button class="nav-item active" id="nav-shop" onclick="switchTab('shop')">
             <svg class="nav-icon-svg" viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
@@ -626,4 +561,38 @@
         const OFFLINE_BACKUP = [
             { title: "La Joconde", desc: "Tableau de Léonard de Vinci conservé au Musée du Louvre.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/400px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg" },
             { title: "Tour Eiffel", desc: "Tour de fer puddled de 330 mètres située à Paris.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Tour_Eiffel_Wikimedia_Commons_%28cropped%29.jpg/400px-Tour_Eiffel_Wikimedia_Commons_%28cropped%29.jpg" },
-            { title: "Système solaire", desc: "Système planétaire composé du Soleil 
+            { title: "Système solaire", desc: "Système planétaire composé du Soleil et des objets célestes en orbite.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Planets2013.svg/500px-Planets2013.svg.png" },
+            { title: "Napoléon Ier", desc: "Premier empereur des Français et général des guerres napoléoniennes.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Jacques-Louis_David_-_The_Emperor_Napoleon_in_His_Study_at_the_Tuileries_-_Google_Art_Project.jpg/400px-Jacques-Louis_David_-_The_Emperor_Napoleon_in_His_Study_at_the_Tuileries_-_Google_Art_Project.jpg" },
+            { title: "Baleine bleue", desc: "Le plus grand animal vivant connu ayant jamais existé.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Blue_Whale_001_body_full.jpg/400px-Blue_Whale_001_body_full.jpg" }
+        ];
+
+        window.onload = () => {
+            maintainCacheBuffer();
+        };
+
+        async function maintainCacheBuffer() {
+            while (preloadedCache.length < 15) {
+                try {
+                    let res = await fetch('https://fr.wikipedia.org/api/rest_v1/page/random/summary');
+                    let data = await res.json();
+                    let rarity = calcRarityStrict();
+                    preloadedCache.push({
+                        title: data.title || "Article Wikipédia",
+                        desc: data.extract || "Article officiel Wikipédia.",
+                        img: (data.thumbnail && data.thumbnail.source) ? data.thumbnail.source : FALLBACK_IMG,
+                        rarity: rarity,
+                        atk: Math.floor(1200 + Math.random() * 8300),
+                        def: Math.floor(1200 + Math.random() * 8300)
+                    });
+                } catch(e) {
+                    let b = OFFLINE_BACKUP[Math.floor(Math.random() * OFFLINE_BACKUP.length)];
+                    preloadedCache.push({ ...b, rarity: calcRarityStrict(), atk: 5000, def: 5000 });
+                }
+            }
+        }
+
+        function calcRarityStrict() {
+            let roll = Math.random() * 100;
+            if (roll < 0.1)  return { code: 'L',  name: 'Légendaire',  color: '#f59e0b' };
+            if (roll < 1.5)  return { code: 'UR', name: 'Ultra Rare', color: '#ef4444' };
+            if (roll < 6.5)  return { code: 'SR', name: '
