@@ -1,4 +1,4 @@
-name: Build HTML to Android APK
+name: Build HTML to Android APk
 
 on:
   push:
