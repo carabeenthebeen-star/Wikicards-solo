@@ -1,575 +1,527 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>WikiMaster</title>
-    <style>
-        :root {
-            --bg-color: #0b0c0e;
-            --surface-color: #121418;
-            --accent-green: #22c55e;
-            --text-primary: #ffffff;
-            --text-secondary: #8a94a6;
-        }
+<!-- WIKIMASTER-STYLE : OUVERTURE DE PAQUETS -->
+<div id="wm-app">
+  <style>
+    #wm-app {
+      --bg: #0b1020;
+      --panel: #151d32;
+      --gold: #ffc857;
+      color: #f5f7ff;
+      font-family: Arial, sans-serif;
+      background: var(--bg);
+      padding: 18px;
+      border-radius: 18px;
+      min-height: 600px;
+      box-sizing: border-box;
+    }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
+    #wm-app * { box-sizing: border-box; }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            overflow-x: hidden;
-            padding-bottom: 70px;
-        }
+    #wm-app .wm-header {
+      text-align: center;
+      padding: 16px 0 24px;
+    }
 
-        header {
-            width: 100%;
-            max-width: 420px;
-            padding: 14px 18px;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 12px;
-        }
+    #wm-app .wm-header h1 {
+      font-size: clamp(27px, 6vw, 40px);
+      margin: 0 0 8px;
+      color: var(--gold);
+      letter-spacing: 1px;
+    }
 
-        .currency-badge {
-            background: #0f1f17;
-            border: 1px solid #1c3d2a;
-            border-radius: 20px;
-            padding: 6px 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--accent-green);
-            font-weight: 800;
-            font-size: 14px;
-        }
+    #wm-app .wm-header p { color: #aebbd4; margin: 0; }
 
-        .currency-icon {
-            width: 18px;
-            height: 18px;
-            border: 1.5px solid var(--accent-green);
-            color: var(--accent-green);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            font-weight: 900;
-        }
+    #wm-app .wm-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 8px;
+      margin-bottom: 22px;
+    }
 
-        .main-container {
-            width: 100%;
-            max-width: 420px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 0 20px;
-        }
+    #wm-app .wm-stat {
+      background: var(--panel);
+      border: 1px solid #293754;
+      border-radius: 12px;
+      padding: 13px 5px;
+      text-align: center;
+    }
 
-        .title-main {
-            font-size: 30px;
-            font-weight: 900;
-            text-align: center;
-            margin-top: 15px;
-            margin-bottom: 30px;
-            color: #ffffff;
-        }
+    #wm-app .wm-stat strong {
+      display: block;
+      color: var(--gold);
+      font-size: 23px;
+      margin-bottom: 5px;
+    }
 
-        .booster-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            flex: 1;
-            width: 100%;
-        }
+    #wm-app .wm-stat span {
+      font-size: 11px;
+      color: #bdc9df;
+    }
 
-        .booster-subtitle {
-            color: var(--text-secondary);
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 6px;
-            text-align: center;
-        }
+    #wm-app .wm-section-title {
+      font-size: 19px;
+      margin: 22px 0 12px;
+    }
 
-        .booster-link {
-            color: var(--accent-green);
-            font-size: 13px;
-            font-weight: 700;
-            margin-bottom: 30px;
-        }
+    #wm-app .wm-packs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(135px, 1fr));
+      gap: 12px;
+    }
 
-        .booster-pack {
-            width: 190px;
-            height: 270px;
-            background: linear-gradient(175deg, #ffffff 0%, #e2e8f0 70%, #cbd5e1 100%);
-            border-radius: 12px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 25px;
-            border: 1px solid rgba(255,255,255,0.4);
-            cursor: pointer;
-        }
+    #wm-app .wm-pack {
+      border: 1px solid #344361;
+      border-radius: 15px;
+      background: linear-gradient(145deg, #202d4a, #121a2d);
+      padding: 15px 9px;
+      text-align: center;
+      cursor: pointer;
+      color: white;
+      min-width: 0;
+      transition: transform .15s, border-color .15s;
+    }
 
-        .wm-badge {
-            width: 72px;
-            height: 72px;
-            background: #000000;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #ffffff;
-            font-size: 22px;
-            font-weight: 900;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-        }
+    #wm-app .wm-pack:hover {
+      transform: translateY(-3px);
+      border-color: var(--gold);
+    }
 
-        .btn-open {
-            background: transparent;
-            border: none;
-            color: var(--accent-green);
-            font-size: 22px;
-            font-weight: 900;
-            cursor: pointer;
-            padding: 10px;
-        }
+    #wm-app .wm-pack:active { transform: scale(.97); }
 
-        .card-stage {
-            perspective: 1000px;
-            width: 300px;
-            height: 420px;
-            margin: 10px 0 20px 0;
-            cursor: pointer;
-        }
+    #wm-app .wm-pack-art {
+      height: 105px;
+      display: grid;
+      place-items: center;
+      font-size: 58px;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      background: radial-gradient(circle, #394e79, #121a2d 75%);
+    }
 
-        .card-flipper {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.5s ease;
-        }
+    #wm-app .wm-pack h3 { margin: 5px 0; font-size: 15px; }
+    #wm-app .wm-pack p { margin: 7px 0 0; color: #b9c5db; font-size: 12px; }
 
-        .card-flipper.flipped {
-            transform: rotateY(180deg);
-        }
+    #wm-app .wm-button {
+      background: var(--gold);
+      color: #19172a;
+      border: none;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-weight: bold;
+      cursor: pointer;
+      font-size: 14px;
+    }
 
-        .card-face {
-            position: absolute;
-            inset: 0;
-            backface-visibility: hidden;
-            border-radius: 16px;
-            border: 3px solid #262c38;
-            padding: 14px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            background: #14171f;
-        }
+    #wm-app .wm-button:hover { filter: brightness(1.08); }
 
-        .card-back {
-            background: #0d1017;
-            align-items: center;
-            justify-content: center;
-        }
+    #wm-app .wm-button.secondary {
+      color: white;
+      background: #293754;
+      border: 1px solid #405274;
+    }
 
-        .card-front {
-            transform: rotateY(180deg);
-        }
+    #wm-app .wm-toolbar {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+    }
 
-        .card-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    #wm-app .wm-toolbar input,
+    #wm-app .wm-toolbar select {
+      min-width: 0;
+      flex: 1;
+      padding: 11px;
+      color: white;
+      background: #151d32;
+      border: 1px solid #344361;
+      border-radius: 9px;
+    }
 
-        .card-title {
-            font-size: 15px;
-            font-weight: 900;
-            color: #fff;
-            max-width: 180px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+    #wm-app .wm-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
+      gap: 12px;
+    }
 
-        .card-badge {
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 9px;
-            font-weight: 900;
-            text-transform: uppercase;
-            color: #000;
-        }
+    #wm-app .wm-card {
+      border-radius: 13px;
+      padding: 10px;
+      background: #182239;
+      border: 2px solid #637087;
+      text-align: center;
+      overflow: hidden;
+      animation: wm-appear .3s ease both;
+    }
 
-        .card-img-box {
-            width: 100%;
-            height: 190px;
-            background: #000;
-            border-radius: 8px;
-            overflow: hidden;
-        }
+    #wm-app .wm-card .wm-card-art {
+      min-height: 110px;
+      border-radius: 9px;
+      display: grid;
+      place-items: center;
+      font-size: 57px;
+      background: radial-gradient(circle, #364c70, #10172a);
+      margin-bottom: 10px;
+    }
 
-        .card-img-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+    #wm-app .wm-card h3 {
+      font-size: 14px;
+      margin: 7px 0;
+      overflow-wrap: anywhere;
+    }
 
-        .card-stats {
-            display: flex;
-            justify-content: space-between;
-            background: #090c10;
-            padding: 8px 12px;
-            border-radius: 8px;
-        }
+    #wm-app .wm-card .wm-rarity {
+      font-size: 11px;
+      text-transform: uppercase;
+      font-weight: bold;
+    }
 
-        .card-desc {
-            font-size: 11px;
-            color: #94a3b8;
-            height: 40px;
-            overflow: hidden;
-        }
+    #wm-app .wm-card .wm-qty {
+      font-size: 11px;
+      color: #c3cde0;
+      margin-top: 7px;
+    }
 
-        .btn-action {
-            width: 100%;
-            max-width: 300px;
-            background: #122e1d;
-            border: 1.5px solid var(--accent-green);
-            color: var(--accent-green);
-            padding: 14px;
-            border-radius: 12px;
-            font-weight: 900;
-            font-size: 15px;
-            cursor: pointer;
-            text-transform: uppercase;
-            text-align: center;
-        }
+    #wm-app .r-Commun { border-color: #8492a8; }
+    #wm-app .r-Rare { border-color: #42a5ff; }
+    #wm-app .r-Épique { border-color: #c071ff; }
+    #wm-app .r-Légendaire { border-color: #ffc857; }
+    #wm-app .r-Mythique {
+      border-color: #ff638d;
+      box-shadow: 0 0 12px #ff638d35;
+    }
 
-        .grid-cards {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            width: 100%;
-        }
+    #wm-app .rarity-Commun { color: #b5c0d0; }
+    #wm-app .rarity-Rare { color: #42a5ff; }
+    #wm-app .rarity-Épique { color: #ce8aff; }
+    #wm-app .rarity-Légendaire { color: #ffc857; }
+    #wm-app .rarity-Mythique { color: #ff7fa0; }
 
-        .mini-card {
-            background: #14171f;
-            border: 2px solid #262c38;
-            border-radius: 10px;
-            padding: 8px;
-            display: flex;
-            flex-direction: column;
-        }
+    #wm-app .wm-results {
+      margin-top: 22px;
+      padding: 16px;
+      border-radius: 15px;
+      background: #10182b;
+      border: 1px solid #293754;
+    }
 
-        .mini-img {
-            width: 100%;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 6px;
-            background: #000;
-            margin-bottom: 6px;
-        }
+    #wm-app .wm-results-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
 
-        .mini-title {
-            font-size: 11px;
-            font-weight: 800;
-            color: #fff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+    #wm-app .wm-results-head h2 { font-size: 19px; margin: 0; }
 
-        .mini-rarity {
-            font-size: 9px;
-            font-weight: 900;
-            margin-top: 2px;
-            text-transform: uppercase;
-        }
+    #wm-app .wm-empty {
+      text-align: center;
+      padding: 25px 8px;
+      color: #aebbd4;
+    }
 
-        nav.bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: #0f1115;
-            border-top: 1px solid #1a1e26;
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            z-index: 100;
-        }
+    #wm-app .wm-hidden { display: none !important; }
 
-        .nav-item {
-            background: none;
-            border: none;
-            color: #525d73;
-            font-size: 11px;
-            font-weight: 700;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            cursor: pointer;
-        }
+    @keyframes wm-appear {
+      from { opacity: 0; transform: translateY(8px) scale(.96); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
 
-        .nav-item.active {
-            color: var(--accent-green);
-        }
+    @media (max-width: 380px) {
+      #wm-app { padding: 12px; }
+      #wm-app .wm-packs { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      #wm-app .wm-cards { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+  </style>
 
-        .hidden { display: none !important; }
-    </style>
-</head>
-<body>
+  <header class="wm-header">
+    <h1>⚡ WIKI MASTER</h1>
+    <p>Ouvre tes paquets. Découvre des cartes. Complète ta collection.</p>
+  </header>
 
-    <header>
-        <div class="currency-badge">
-            <div class="currency-icon">W</div>
-            <span>10 964</span>
-        </div>
-    </header>
-
-    <!-- BOUTIQUE -->
-    <div id="view-shop" class="main-container">
-        <h1 class="title-main">Ouvrir un paquet</h1>
-        <div class="booster-wrapper">
-            <div class="booster-subtitle">Découvrez 5 nouvelles cartes Wikipédia</div>
-            <div class="booster-link">Comment ça marche ?</div>
-
-            <div class="booster-pack" onclick="openBoosterPack()">
-                <div class="wm-badge">WM</div>
-            </div>
-
-            <button class="btn-open" onclick="openBoosterPack()">Ouvrir</button>
-        </div>
+  <div class="wm-stats">
+    <div class="wm-stat">
+      <strong id="wm-total">0</strong>
+      <span>CARTES OBTENUES</span>
     </div>
-
-    <!-- TIRAGE -->
-    <div id="view-pull" class="main-container hidden">
-        <div id="pull-progress" style="font-size: 14px; font-weight: 700; color: var(--text-secondary); margin-bottom: 5px;">Carte 1 / 5</div>
-
-        <div class="card-stage" onclick="flipActiveCard()">
-            <div class="card-flipper" id="card-flipper">
-                <div class="card-face card-back">
-                    <div class="wm-badge">WM</div>
-                </div>
-                <div class="card-face card-front" id="card-front">
-                    <div class="card-top">
-                        <div class="card-title" id="c-title">Titre</div>
-                        <div class="card-badge" id="c-badge">COMMUNE</div>
-                    </div>
-                    <div class="card-img-box">
-                        <img id="c-img" src="" alt="Image" onerror="this.src='https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&q=80'">
-                    </div>
-                    <div class="card-stats">
-                        <div><span style="font-size:9px;color:#8a94a6">ATK </span><strong id="c-atk">0</strong></div>
-                        <div><span style="font-size:9px;color:#8a94a6">DEF </span><strong id="c-def">0</strong></div>
-                    </div>
-                    <div class="card-desc" id="c-desc">Description...</div>
-                </div>
-            </div>
-        </div>
-
-        <button class="btn-action" id="btn-next-step" onclick="handleNextStep()">Révéler la carte</button>
+    <div class="wm-stat">
+      <strong id="wm-unique">0</strong>
+      <span>CARTES UNIQUES</span>
     </div>
-
-    <!-- RECAP -->
-    <div id="view-recap" class="main-container hidden">
-        <h1 class="title-main" style="font-size: 22px;">Paquet ouvert !</h1>
-        <div class="grid-cards" id="recap-grid" style="margin-bottom: 20px;"></div>
-        <button class="btn-action" onclick="switchTab('shop')">Terminer</button>
+    <div class="wm-stat">
+      <strong id="wm-packs-opened">0</strong>
+      <span>PAQUETS OUVERTS</span>
     </div>
+  </div>
 
-    <!-- COLLECTION -->
-    <div id="view-collection" class="main-container hidden">
-        <h1 class="title-main" style="font-size: 22px;">Ma Collection</h1>
-        <div id="col-empty" style="color: var(--text-secondary); margin-top: 30px;">Aucune carte pour l'instant.</div>
-        <div class="grid-cards" id="collection-grid"></div>
+  <h2 class="wm-section-title">🎁 Boutique de paquets</h2>
+  <div class="wm-packs">
+    <button class="wm-pack" data-pack="basic">
+      <div class="wm-pack-art">📦</div>
+      <h3>Paquet classique</h3>
+      <p>5 cartes · Gratuit</p>
+    </button>
+
+    <button class="wm-pack" data-pack="rare">
+      <div class="wm-pack-art">💎</div>
+      <h3>Paquet rare</h3>
+      <p>5 cartes · Gratuit</p>
+    </button>
+
+    <button class="wm-pack" data-pack="epic">
+      <div class="wm-pack-art">🔮</div>
+      <h3>Paquet épique</h3>
+      <p>5 cartes · Gratuit</p>
+    </button>
+
+    <button class="wm-pack" data-pack="legend">
+      <div class="wm-pack-art">👑</div>
+      <h3>Paquet légendaire</h3>
+      <p>5 cartes · Gratuit</p>
+    </button>
+  </div>
+
+  <section id="wm-results" class="wm-results wm-hidden">
+    <div class="wm-results-head">
+      <h2>✨ Tes cartes obtenues</h2>
+      <button id="wm-close-results" class="wm-button secondary">Fermer</button>
     </div>
+    <div id="wm-new-cards" class="wm-cards"></div>
+  </section>
 
-    <nav class="bottom-nav">
-        <button class="nav-item active" onclick="switchTab('shop')">
-            <span>🧩 Paquets</span>
-        </button>
-        <button class="nav-item" onclick="switchTab('collection')">
-            <span>📖 Collection</span>
-        </button>
-    </nav>
+  <h2 class="wm-section-title">📚 Ma collection</h2>
 
-    <script>
-        let collection = [];
-        let activePack = [];
-        let packIndex = 0;
-        let isFlipped = false;
+  <div class="wm-toolbar">
+    <input id="wm-search" type="search" placeholder="Rechercher une carte...">
+    <select id="wm-filter" aria-label="Filtrer par rareté">
+      <option value="all">Toutes les raretés</option>
+      <option value="Commun">Communes</option>
+      <option value="Rare">Rares</option>
+      <option value="Épique">Épiques</option>
+      <option value="Légendaire">Légendaires</option>
+      <option value="Mythique">Mythiques</option>
+    </select>
+  </div>
 
-        const FALLBACK_IMG = "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&q=80";
-        const SAFE_CARDS = [
-            { title: "La Joconde", desc: "Tableau de Léonard de Vinci au Louvre.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/400px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg", atk: 8500, def: 7200 },
-            { title: "Tour Eiffel", desc: "Monument parisien de 330 mètres.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Tour_Eiffel_Wikimedia_Commons_%28cropped%29.jpg/400px-Tour_Eiffel_Wikimedia_Commons_%28cropped%29.jpg", atk: 6400, def: 8900 },
-            { title: "Système solaire", desc: "Système planétaire de notre étoile.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Planets2013.svg/500px-Planets2013.svg.png", atk: 9000, def: 9000 },
-            { title: "Napoléon Ier", desc: "Empereur des Français.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Jacques-Louis_David_-_The_Emperor_Napoleon_in_His_Study_at_the_Tuileries_-_Google_Art_Project.jpg/400px-Jacques-Louis_David_-_The_Emperor_Napoleon_in_His_Study_at_the_Tuileries_-_Google_Art_Project.jpg", atk: 7800, def: 6500 },
-            { title: "Baleine bleue", desc: "Le plus grand animal vivant.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Blue_Whale_001_body_full.jpg/400px-Blue_Whale_001_body_full.jpg", atk: 9500, def: 8000 }
-        ];
+  <div id="wm-collection" class="wm-cards"></div>
+  <p id="wm-empty" class="wm-empty">Ouvre ton premier paquet pour obtenir tes cartes !</p>
 
-        let cardCache = [...SAFE_CARDS, ...SAFE_CARDS, ...SAFE_CARDS];
+  <div style="text-align:center;margin-top:25px">
+    <button id="wm-reset" class="wm-button secondary">Réinitialiser ma collection</button>
+  </div>
 
-        function getRandomRarity() {
-            let r = Math.random() * 100;
-            if (r < 0.1) return { name: 'Légendaire', color: '#f59e0b' };
-            if (r < 1.5) return { name: 'Ultra Rare', color: '#ef4444' };
-            if (r < 6.5) return { name: 'Super Rare', color: '#a855f7' };
-            if (r < 20)  return { name: 'Rare', color: '#3b82f6' };
-            if (r < 45)  return { name: 'Peu Commune', color: '#22c55e' };
-            return { name: 'Commune', color: '#94a3b8' };
-        }
+  <script>
+  (function () {
+    "use strict";
 
-        function switchTab(tab) {
-            try {
-                document.getElementById('view-shop').classList.add('hidden');
-                document.getElementById('view-pull').classList.add('hidden');
-                document.getElementById('view-recap').classList.add('hidden');
-                document.getElementById('view-collection').classList.add('hidden');
-                
-                const navItems = document.querySelectorAll('.nav-item');
-                navItems.forEach(el => el.classList.remove('active'));
+    const root = document.getElementById("wm-app");
+    if (!root || root.dataset.initialized === "yes") return;
+    root.dataset.initialized = "yes";
 
-                if (tab === 'shop') {
-                    document.getElementById('view-shop').classList.remove('hidden');
-                    navItems[0].classList.add('active');
-                } else if (tab === 'collection') {
-                    document.getElementById('view-collection').classList.remove('hidden');
-                    navItems[1].classList.add('active');
-                    renderCollection();
-                }
-            } catch(err) {
-                console.error(err);
-            }
-        }
+    const cards = [
+      { id: 1, name: "Guerrier solaire", emoji: "⚔️", rarity: "Commun" },
+      { id: 2, name: "Mage des flammes", emoji: "🔥", rarity: "Commun" },
+      { id: 3, name: "Gardien des forêts", emoji: "🌳", rarity: "Commun" },
+      { id: 4, name: "Archer lunaire", emoji: "🏹", rarity: "Commun" },
+      { id: 5, name: "Chevalier de fer", emoji: "🛡️", rarity: "Commun" },
+      { id: 6, name: "Loup des ombres", emoji: "🐺", rarity: "Commun" },
+      { id: 7, name: "Dragon bleu", emoji: "🐉", rarity: "Rare" },
+      { id: 8, name: "Assassin spectral", emoji: "🥷", rarity: "Rare" },
+      { id: 9, name: "Reine des glaces", emoji: "❄️", rarity: "Rare" },
+      { id: 10, name: "Phénix royal", emoji: "🦅", rarity: "Rare" },
+      { id: 11, name: "Samouraï éternel", emoji: "🥷", rarity: "Rare" },
+      { id: 12, name: "Druide ancien", emoji: "🌿", rarity: "Rare" },
+      { id: 13, name: "Démon abyssal", emoji: "👹", rarity: "Épique" },
+      { id: 14, name: "Ange céleste", emoji: "😇", rarity: "Épique" },
+      { id: 15, name: "Titan de cristal", emoji: "💠", rarity: "Épique" },
+      { id: 16, name: "Sorcière du néant", emoji: "🧙", rarity: "Épique" },
+      { id: 17, name: "Dragon des étoiles", emoji: "🐲", rarity: "Légendaire" },
+      { id: 18, name: "Empereur divin", emoji: "👑", rarity: "Légendaire" },
+      { id: 19, name: "Dieu de la guerre", emoji: "⚡", rarity: "Légendaire" },
+      { id: 20, name: "Phoenix primordial", emoji: "🌋", rarity: "Mythique" },
+      { id: 21, name: "Roi du multivers", emoji: "🌌", rarity: "Mythique" },
+      { id: 22, name: "Créateur absolu", emoji: "✨", rarity: "Mythique" }
+    ];
 
-        function openBoosterPack() {
-            try {
-                activePack = [];
-                for (let i = 0; i < 5; i++) {
-                    let template = cardCache[Math.floor(Math.random() * cardCache.length)];
-                    activePack.push({
-                        ...template,
-                        rarity: getRandomRarity()
-                    });
-                }
+    const weights = {
+      basic:  { Commun: 68, Rare: 23, Épique: 7, Légendaire: 1.8, Mythique: 0.2 },
+      rare:   { Commun: 35, Rare: 42, Épique: 18, Légendaire: 4.5, Mythique: 0.5 },
+      epic:   { Commun: 10, Rare: 30, Épique: 45, Légendaire: 13, Mythique: 2 },
+      legend: { Commun: 0, Rare: 10, Épique: 30, Légendaire: 50, Mythique: 10 }
+    };
 
-                packIndex = 0;
-                switchTab('pull');
-                loadCardInStage();
-            } catch(err) {
-                alert("Erreur ouverture : " + err.message);
-            }
-        }
+    const packNames = {
+      basic: "Paquet classique",
+      rare: "Paquet rare",
+      epic: "Paquet épique",
+      legend: "Paquet légendaire"
+    };
 
-        function loadCardInStage() {
-            try {
-                isFlipped = false;
-                document.getElementById('card-flipper').classList.remove('flipped');
-                document.getElementById('pull-progress').innerText = `Carte ${packIndex + 1} / 5`;
-                document.getElementById('btn-next-step').innerText = "Révéler la carte";
+    const storageKey = "wm_collection_v1";
+    let collection = {};
+    let packsOpened = 0;
+    let sessionTotal = 0;
 
-                let card = activePack[packIndex];
-                if (!collection.some(c => c.title === card.title)) {
-                    collection.push(card);
-                }
+    try {
+      const saved = JSON.parse(localStorage.getItem(storageKey) || "{}");
+      if (saved && typeof saved === "object") {
+        collection = saved.collection && typeof saved.collection === "object"
+          ? saved.collection : {};
+        packsOpened = Number.isFinite(saved.packsOpened)
+          ? saved.packsOpened : 0;
+        sessionTotal = Number.isFinite(saved.sessionTotal)
+          ? saved.sessionTotal : 0;
+      }
+    } catch (error) {
+      console.warn("Sauvegarde indisponible : la collection reste en mémoire.", error);
+    }
 
-                document.getElementById('c-title').innerText = card.title;
-                document.getElementById('c-desc').innerText = card.desc;
-                document.getElementById('c-img').src = card.img;
-                document.getElementById('c-atk').innerText = card.atk;
-                document.getElementById('c-def').innerText = card.def;
+    function save() {
+      try {
+        localStorage.setItem(storageKey, JSON.stringify({
+          collection: collection,
+          packsOpened: packsOpened,
+          sessionTotal: sessionTotal
+        }));
+      } catch (error) {
+        console.warn("Impossible de sauvegarder sur cet appareil.", error);
+      }
+    }
 
-                let badge = document.getElementById('c-badge');
-                badge.innerText = card.rarity.name;
-                badge.style.background = card.rarity.color;
-                document.getElementById('card-front').style.borderColor = card.rarity.color;
-            } catch(err) {
-                console.error(err);
-            }
-        }
+    function chooseRarity(packType) {
+      const table = weights[packType] || weights.basic;
+      const roll = Math.random() * 100;
+      let sum = 0;
 
-        function flipActiveCard() {
-            if (!isFlipped) {
-                isFlipped = true;
-                document.getElementById('card-flipper').classList.add('flipped');
-                document.getElementById('btn-next-step').innerText = packIndex < 4 ? "Carte Suivante ➔" : "Voir le récapitulatif";
-            }
-        }
+      for (const rarity of [
+        "Commun", "Rare", "Épique", "Légendaire", "Mythique"
+      ]) {
+        sum += table[rarity] || 0;
+        if (roll < sum) return rarity;
+      }
+      return "Commun";
+    }
 
-        function handleNextStep() {
-            if (!isFlipped) {
-                flipActiveCard();
-            } else {
-                packIndex++;
-                if (packIndex < 5) {
-                    loadCardInStage();
-                } else {
-                    showRecap();
-                }
-            }
-        }
+    function chooseCard(packType) {
+      const rarity = chooseRarity(packType);
+      const pool = cards.filter(card => card.rarity === rarity);
+      const selected = pool[Math.floor(Math.random() * pool.length)];
+      return selected || cards[0];
+    }
 
-        function showRecap() {
-            document.getElementById('view-pull').classList.add('hidden');
-            document.getElementById('view-recap').classList.remove('hidden');
-            let grid = document.getElementById('recap-grid');
-            grid.innerHTML = '';
-            activePack.forEach(c => {
-                let div = document.createElement('div');
-                div.className = 'mini-card';
-                div.style.borderColor = c.rarity.color;
-                div.innerHTML = `
-                    <img src="${c.img}" class="mini-img" onerror="this.src='${FALLBACK_IMG}'">
-                    <div class="mini-title">${c.title}</div>
-                    <div class="mini-rarity" style="color:${c.rarity.color}">${c.rarity.name}</div>
-                `;
-                grid.appendChild(div);
-            });
-        }
+    function cardHTML(card, qty) {
+      const rarityClass = card.rarity.replace(/[^a-zA-ZÀ-ÿ]/g, "");
+      return `
+        <article class="wm-card r-${rarityClass}">
+          <div class="wm-card-art">${card.emoji}</div>
+          <h3>${card.name}</h3>
+          <div class="wm-rarity rarity-${rarityClass}">${card.rarity}</div>
+          ${qty !== null ? `<div class="wm-qty">Possédées : ${qty}</div>` : ""}
+        </article>
+      `;
+    }
 
-        function renderCollection() {
-            let grid = document.getElementById('collection-grid');
-            let empty = document.getElementById('col-empty');
-            grid.innerHTML = '';
-            if (collection.length === 0) {
-                empty.classList.remove('hidden');
-                return;
-            }
-            empty.classList.add('hidden');
-            collection.forEach(c => {
-                let div = document.createElement('div');
-                div.className = 'mini-card';
-                div.style.borderColor = c.rarity.color;
-                div.innerHTML = `
-                    <img src="${c.img}" class="mini-img" onerror="this.src='${FALLBACK_IMG}'">
-                    <div class="mini-title">${c.title}</div>
-                    <div class="mini-rarity" style="color:${c.rarity.color}">${c.rarity.name}</div>
-                `;
-                grid.appendChild(div);
-            });
-        }
-    </script>
-</body>
-</html>
+    function updateStats() {
+      const unique = Object.keys(collection).filter(id =>
+        Number(collection[id]) > 0
+      ).length;
+
+      const total = Object.values(collection).reduce((sum, qty) =>
+        sum + Math.max(0, Number(qty) || 0), 0);
+
+      root.querySelector("#wm-total").textContent = total;
+      root.querySelector("#wm-unique").textContent = unique;
+      root.querySelector("#wm-packs-opened").textContent = packsOpened;
+    }
+
+    function renderCollection() {
+      const container = root.querySelector("#wm-collection");
+      const empty = root.querySelector("#wm-empty");
+      const search = root.querySelector("#wm-search").value
+        .trim().toLowerCase();
+      const filter = root.querySelector("#wm-filter").value;
+
+      const owned = cards.filter(card => Number(collection[card.id]) > 0)
+        .filter(card => card.name.toLowerCase().includes(search))
+        .filter(card => filter === "all" || card.rarity === filter)
+        .sort((a, b) => {
+          const order = {
+            Mythique: 0, Légendaire: 1, Épique: 2, Rare: 3, Commun: 4
+          };
+          return order[a.rarity] - order[b.rarity];
+        });
+
+      container.innerHTML = owned.map(card =>
+        cardHTML(card, Number(collection[card.id]) || 0)
+      ).join("");
+
+      empty.classList.toggle("wm-hidden", owned.length > 0);
+
+      if (owned.length === 0) {
+        empty.textContent = Object.values(collection).some(qty => Number(qty) > 0)
+          ? "Aucune carte ne correspond à ta recherche."
+          : "Ouvre ton premier paquet pour obtenir tes cartes !";
+      }
+
+      updateStats();
+    }
+
+    function openPack(type) {
+      if (!weights[type]) return;
+
+      const newCards = [];
+
+      // Ouverture immédiate : aucun délai ni animation bloquante.
+      for (let i = 0; i < 5; i++) {
+        const card = chooseCard(type);
+        newCards.push(card);
+        collection[card.id] = (Number(collection[card.id]) || 0) + 1;
+      }
+
+      packsOpened++;
+      sessionTotal += 5;
+      save();
+
+      root.querySelector("#wm-new-cards").innerHTML =
+        newCards.map(card => cardHTML(card, null)).join("");
+
+      root.querySelector("#wm-results").classList.remove("wm-hidden");
+      renderCollection();
+
+      root.querySelector("#wm-results").scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+
+    root.querySelectorAll("[data-pack]").forEach(button => {
+      button.addEventListener("click", function () {
+        openPack(this.dataset.pack);
+      });
+    });
+
+    root.querySelector("#wm-close-results").addEventListener("click", function () {
+      root.querySelector("#wm-results").classList.add("wm-hidden");
+    });
+
+    root.querySelector("#wm-search").addEventListener("input", renderCollection);
+    root.querySelector("#wm-filter").addEventListener("change", renderCollection);
+
+    root.querySelector("#wm-reset").addEventListener("click", function () {
+      if (!confirm("Effacer toute ta collection et les statistiques ?")) return;
+
+      collection = {};
+      packsOpened = 0;
+      sessionTotal = 0;
+      save();
+
+      root.querySelector("#wm-results").classList.add("wm-hidden");
+      renderCollection();
+    });
+
+    renderCollection();
+  })();
+  </script>
+</div>
+<!-- FIN WIKIMASTER-STYLE -->
