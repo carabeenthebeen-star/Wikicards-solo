@@ -1,599 +1,747 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>WikiMaster - Émulation</title>
-    <style>
-        :root {
-            --bg-color: #0b0c0e;
-            --surface-color: #121418;
-            --accent-green: #22c55e;
-            --accent-green-bg: #143522;
-            --text-primary: #ffffff;
-            --text-secondary: #8a94a6;
-        }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b1020">
+  <title>WikiMaster - Collection de cartes</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #151e32;
+      --panel2: #1b2943;
+      --gold: #ffcc66;
+      --text: #f4f6ff;
+      --muted: #aab8d1;
+      --border: #33425f;
+    }
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            user-select: none;
-            -webkit-tap-highlight-color: transparent;
-        }
+    * { box-sizing: border-box; }
 
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: space-between;
-            overflow-x: hidden;
-            padding-bottom: 70px;
-        }
+    body {
+      margin: 0;
+      color: var(--text);
+      background: var(--bg);
+      font-family: system-ui, Arial, sans-serif;
+    }
 
-        /* HEADER */
-        header {
-            width: 100%;
-            max-width: 420px;
-            padding: 14px 18px;
-            display: flex;
-            justify-content: flex-end;
-            align-items: center;
-            gap: 12px;
-            z-index: 10;
-        }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
 
-        .currency-badge {
-            background: #0f1f17;
-            border: 1px solid #1c3d2a;
-            border-radius: 20px;
-            padding: 6px 14px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--accent-green);
-            font-weight: 800;
-            font-size: 14px;
-        }
+    .app {
+      max-width: 1100px;
+      min-height: 100vh;
+      margin: auto;
+      padding: 18px;
+    }
 
-        .currency-icon {
-            width: 18px;
-            height: 18px;
-            border: 1.5px solid var(--accent-green);
-            color: var(--accent-green);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 10px;
-            font-weight: 900;
-        }
+    header {
+      text-align: center;
+      padding: 22px 0;
+    }
 
-        .notif-btn {
-            position: relative;
-            background: #14171d;
-            border: 1px solid #232833;
-            border-radius: 50%;
-            width: 38px;
-            height: 38px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #fff;
-            font-size: 16px;
-        }
+    header h1 {
+      margin: 0;
+      color: var(--gold);
+      font-size: clamp(29px, 7vw, 44px);
+      letter-spacing: 1px;
+    }
 
-        .notif-badge {
-            position: absolute;
-            top: -2px;
-            right: -2px;
-            background: #ef4444;
-            color: white;
-            font-size: 10px;
-            font-weight: 900;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid var(--bg-color);
-        }
+    header p {
+      color: var(--muted);
+      margin: 8px 0 0;
+    }
 
-        /* CONTAINER PRINCIPAL */
-        .main-container {
-            width: 100%;
-            max-width: 420px;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 0 20px;
-        }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 9px;
+    }
 
-        .title-main {
-            font-size: 30px;
-            font-weight: 900;
-            text-align: center;
-            margin-top: 15px;
-            margin-bottom: 30px;
-            color: #ffffff;
-        }
+    .stat {
+      text-align: center;
+      padding: 14px 4px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      border-radius: 13px;
+    }
 
-        /* BOOSTER PACK GRAPHISMES */
-        .booster-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            flex: 1;
-            width: 100%;
-        }
+    .stat strong {
+      display: block;
+      color: var(--gold);
+      font-size: 24px;
+    }
 
-        .booster-subtitle {
-            color: var(--text-secondary);
-            font-size: 14px;
-            font-weight: 500;
-            margin-bottom: 6px;
-            text-align: center;
-        }
+    .stat span {
+      display: block;
+      font-size: 10px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
 
-        .booster-link {
-            color: var(--accent-green);
-            font-size: 13px;
-            font-weight: 700;
-            margin-bottom: 30px;
-            text-decoration: none;
-        }
+    .tabs {
+      display: flex;
+      gap: 9px;
+      margin: 22px 0;
+    }
 
-        .booster-pack {
-            width: 190px;
-            height: 270px;
-            background: linear-gradient(175deg, #ffffff 0%, #e2e8f0 70%, #cbd5e1 100%);
-            border-radius: 12px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.8);
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-bottom: 25px;
-            border: 1px solid rgba(255,255,255,0.4);
-            cursor: pointer;
-            transition: transform 0.15s ease;
-        }
+    .btn {
+      border: 0;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-weight: 700;
+      background: var(--gold);
+      color: #171b29;
+    }
 
-        .booster-pack:active {
-            transform: scale(0.96);
-        }
+    .btn.secondary {
+      color: var(--text);
+      background: var(--panel2);
+      border: 1px solid var(--border);
+    }
 
-        .booster-pack::before, .booster-pack::after {
-            content: '';
-            position: absolute;
-            left: 0; right: 0;
-            height: 8px;
-            background: repeating-linear-gradient(90deg, #94a3b8, #94a3b8 3px, transparent 3px, transparent 6px);
-            z-index: 3;
-        }
-        .booster-pack::before { top: 0; }
-        .booster-pack::after { bottom: 0; }
+    .tabs .btn { flex: 1; }
 
-        .puzzle-pattern {
-            position: absolute;
-            inset: 0;
-            opacity: 0.8;
-            pointer-events: none;
-        }
+    .btn:disabled {
+      opacity: .55;
+      cursor: wait;
+    }
 
-        .wm-badge {
-            width: 72px;
-            height: 72px;
-            background: #000000;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #ffffff;
-            font-size: 22px;
-            font-weight: 900;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-            z-index: 2;
-        }
+    .section-title {
+      font-size: 21px;
+      margin: 25px 0 14px;
+    }
 
-        .btn-open {
-            background: transparent;
-            border: none;
-            color: var(--accent-green);
-            font-size: 22px;
-            font-weight: 900;
-            cursor: pointer;
-            padding: 10px;
-        }
+    .pack {
+      text-align: center;
+      padding: 25px 16px;
+      border-radius: 17px;
+      border: 1px solid #786039;
+      background:
+        radial-gradient(ellipse at top, #364a70, transparent 65%),
+        linear-gradient(145deg, #1c2943, #111827);
+    }
 
-        /* ANIMATION 3D FLIP CARTE */
-        .card-stage {
-            perspective: 1000px;
-            width: 300px;
-            height: 420px;
-            margin: 10px 0 20px 0;
-            cursor: pointer;
-        }
+    .pack-art {
+      font-size: 75px;
+      filter: drop-shadow(0 5px 15px #0008);
+    }
 
-        .card-flipper {
-            width: 100%;
-            height: 100%;
-            position: relative;
-            transform-style: preserve-3d;
-            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-        }
+    .pack h3 { margin: 10px 0; font-size: 21px; }
 
-        .card-flipper.flipped {
-            transform: rotateY(180deg);
-        }
+    .muted { color: var(--muted); }
 
-        .card-face {
-            position: absolute;
-            inset: 0;
-            backface-visibility: hidden;
-            border-radius: 16px;
-            border: 3px solid #262c38;
-            padding: 14px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            background: #14171f;
-            box-shadow: 0 12px 30px rgba(0,0,0,0.8);
-        }
+    .full { width: 100%; }
 
-        .card-back {
-            background: linear-gradient(145deg, #0d1017 0%, #1a2130 100%);
-            align-items: center;
-            justify-content: center;
-        }
+    .pack .btn {
+      margin-top: 12px;
+      max-width: 350px;
+    }
 
-        .card-front {
-            transform: rotateY(180deg);
-        }
+    .notice {
+      margin-top: 14px;
+      padding: 13px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--muted);
+      border-radius: 10px;
+      font-size: 13px;
+      line-height: 1.5;
+      overflow-wrap: anywhere;
+    }
 
-        .card-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+    .hidden { display: none !important; }
 
-        .card-title {
-            font-size: 15px;
-            font-weight: 900;
-            color: #fff;
-            max-width: 180px;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
 
-        .card-badge {
-            padding: 4px 8px;
-            border-radius: 6px;
-            font-size: 9px;
-            font-weight: 900;
-            text-transform: uppercase;
-            color: #000;
-        }
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
 
-        .card-img-box {
-            width: 100%;
-            height: 190px;
-            background: #000;
-            border-radius: 8px;
-            overflow: hidden;
-        }
+    .card {
+      min-width: 0;
+      padding: 9px;
+      overflow: hidden;
+      border: 2px solid #8592a8;
+      border-radius: 14px;
+      background: linear-gradient(160deg, #1b2942, #111827);
+      animation: appear .25s ease-out;
+    }
 
-        .card-img-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+    .card.r-Rare { border-color: #48b7ff; }
+    .card.r-Épique { border-color: #c57aff; }
+    .card.r-Légendaire {
+      border-color: var(--gold);
+      box-shadow: 0 0 12px #ffcc6625;
+    }
+    .card.r-Mythique {
+      border-color: #ff719c;
+      box-shadow: 0 0 15px #ff719c38;
+    }
 
-        .card-stats {
-            display: flex;
-            justify-content: space-between;
-            background: #090c10;
-            padding: 8px 12px;
-            border-radius: 8px;
-        }
+    .card img {
+      width: 100%;
+      height: 145px;
+      display: block;
+      object-fit: cover;
+      border-radius: 8px;
+      background: #263650;
+    }
 
-        .card-desc {
-            font-size: 11px;
-            color: #94a3b8;
-            height: 40px;
-            overflow: hidden;
-            line-height: 1.3;
-        }
+    .image-placeholder {
+      height: 145px;
+      display: grid;
+      place-items: center;
+      border-radius: 8px;
+      background: #263650;
+      font-size: 42px;
+    }
 
-        .btn-action {
-            width: 100%;
-            max-width: 300px;
-            background: var(--accent-green-bg);
-            border: 1.5px solid var(--accent-green);
-            color: var(--accent-green);
-            padding: 14px;
-            border-radius: 12px;
-            font-weight: 900;
-            font-size: 15px;
-            cursor: pointer;
-            text-transform: uppercase;
-            text-align: center;
-        }
+    .card h3 {
+      margin: 10px 0 7px;
+      font-size: 15px;
+      line-height: 1.35;
+      overflow-wrap: anywhere;
+    }
 
-        /* GRILLES RECAP / COLLECTION */
-        .grid-cards {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
-            width: 100%;
-        }
+    .rarity {
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .7px;
+      text-transform: uppercase;
+    }
 
-        .mini-card {
-            background: #14171f;
-            border: 2px solid #262c38;
-            border-radius: 10px;
-            padding: 8px;
-            display: flex;
-            flex-direction: column;
-        }
+    .r-Commune .rarity { color: #b8c4d7; }
+    .r-Rare .rarity { color: #48b7ff; }
+    .r-Épique .rarity { color: #d3a0ff; }
+    .r-Légendaire .rarity { color: var(--gold); }
+    .r-Mythique .rarity { color: #ff719c; }
 
-        .mini-img {
-            width: 100%;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 6px;
-            background: #000;
-            margin-bottom: 6px;
-        }
+    .description {
+      color: #c2cde0;
+      font-size: 12px;
+      line-height: 1.55;
+      overflow-wrap: anywhere;
+    }
 
-        .mini-title {
-            font-size: 11px;
-            font-weight: 800;
-            color: #fff;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
+    .quantity {
+      margin: 9px 0;
+      color: var(--muted);
+      font-size: 12px;
+    }
 
-        .mini-rarity {
-            font-size: 9px;
-            font-weight: 900;
-            margin-top: 2px;
-            text-transform: uppercase;
-        }
+    .wiki-link {
+      display: inline-block;
+      color: var(--gold);
+      font-size: 12px;
+      line-height: 1.5;
+      margin-top: 6px;
+    }
 
-        /* NAVIGATION BAS */
-        nav.bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: #0f1115;
-            border-top: 1px solid #1a1e26;
-            display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            z-index: 100;
-        }
+    .toolbar {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
 
-        .nav-item {
-            background: none;
-            border: none;
-            color: #525d73;
-            font-size: 11px;
-            font-weight: 700;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 4px;
-            cursor: pointer;
-        }
+    .toolbar input, .toolbar select {
+      width: 50%;
+      min-width: 0;
+      color: var(--text);
+      background: var(--panel);
+      border: 1px solid var(--border);
+      padding: 11px;
+      border-radius: 9px;
+    }
 
-        .nav-item.active {
-            color: var(--accent-green);
-        }
+    .empty {
+      padding: 28px 8px;
+      color: var(--muted);
+      text-align: center;
+      line-height: 1.5;
+    }
 
-        .hidden { display: none !important; }
-    </style>
+    footer {
+      padding: 25px 0 10px;
+      color: #8594ad;
+      text-align: center;
+      font-size: 12px;
+      line-height: 1.6;
+    }
+
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(8px) scale(.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    @media (min-width: 650px) {
+      .cards { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+      .card img, .image-placeholder { height: 190px; }
+    }
+
+    @media (min-width: 900px) {
+      .cards { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    }
+
+    @media (max-width: 360px) {
+      .app { padding: 11px; }
+      .card { padding: 7px; }
+      .card img, .image-placeholder { height: 115px; }
+    }
+  </style>
 </head>
 <body>
 
-    <header>
-        <div class="currency-badge">
-            <div class="currency-icon">W</div>
-            <span>10 964</span>
-        </div>
-        <div class="notif-btn">
-            🔔
-            <div class="notif-badge">3</div>
-        </div>
-    </header>
+<div class="app">
+  <header>
+    <h1>⚡ WIKIMASTER</h1>
+    <p>Explore le monde. Collectionne le savoir.</p>
+  </header>
 
-    <!-- SHOP -->
-    <div id="view-shop" class="main-container">
-        <h1 class="title-main">Ouvrir un paquet</h1>
-        <div class="booster-wrapper">
-            <div class="booster-subtitle">Découvrez 5 nouvelles cartes Wikipédia</div>
-            <a href="#" class="booster-link">Comment ça marche ?</a>
-
-            <div class="booster-pack" onclick="openBoosterPack()">
-                <svg class="puzzle-pattern" viewBox="0 0 100 100" preserveAspectRatio="none">
-                    <circle cx="20" cy="30" r="12" fill="#ef4444" opacity="0.3"/>
-                    <circle cx="80" cy="40" r="15" fill="#3b82f6" opacity="0.3"/>
-                    <circle cx="30" cy="80" r="14" fill="#eab308" opacity="0.3"/>
-                    <circle cx="75" cy="85" r="10" fill="#a855f7" opacity="0.3"/>
-                </svg>
-                <div class="wm-badge">WM</div>
-            </div>
-
-            <button class="btn-open" onclick="openBoosterPack()">Ouvrir</button>
-        </div>
+  <div class="stats">
+    <div class="stat">
+      <strong id="total">0</strong>
+      <span>CARTES OBTENUES</span>
     </div>
+    <div class="stat">
+      <strong id="unique">0</strong>
+      <span>CARTES UNIQUES</span>
+    </div>
+    <div class="stat">
+      <strong id="packs">0</strong>
+      <span>PAQUETS OUVERTS</span>
+    </div>
+  </div>
 
-    <!-- PULL -->
-    <div id="view-pull" class="main-container hidden">
-        <div id="pull-progress" style="font-size: 14px; font-weight: 700; color: var(--text-secondary); margin-bottom: 5px;">Carte 1 / 5</div>
+  <nav class="tabs">
+    <button class="btn" id="shopTab">📦 Paquets</button>
+    <button class="btn secondary" id="collectionTab">📚 Collection</button>
+  </nav>
 
-        <div class="card-stage" onclick="flipActiveCard()">
-            <div class="card-flipper" id="card-flipper">
-                <div class="card-face card-back">
-                    <div class="wm-badge" style="border: 2px solid var(--accent-green)">WM</div>
-                </div>
-                <div class="card-face card-front" id="card-front">
-                    <div class="card-top">
-                        <div class="card-title" id="c-title">Titre</div>
-                        <div class="card-badge" id="c-badge">COMMUNE</div>
-                    </div>
-                    <div class="card-img-box">
-                        <img id="c-img" src="" alt="Image" onerror="this.src='https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&q=80'">
-                    </div>
-                    <div class="card-stats">
-                        <div><span style="font-size:9px;color:#8a94a6">ATK </span><strong id="c-atk">0</strong></div>
-                        <div><span style="font-size:9px;color:#8a94a6">DEF </span><strong id="c-def">0</strong></div>
-                    </div>
-                    <div class="card-desc" id="c-desc">Description...</div>
-                </div>
-            </div>
+  <main>
+    <section id="shop">
+      <h2 class="section-title">🎁 Paquet mystère</h2>
+
+      <div class="pack">
+        <div class="pack-art">🎴</div>
+        <h3>Paquet Wikipédia</h3>
+        <p class="muted">5 cartes aléatoires</p>
+        <p class="muted">Tous les sujets · Gratuit · Illimité</p>
+        <button class="btn full" id="openPack">OUVRIR UN PAQUET</button>
+      </div>
+
+      <div class="notice" id="status" role="status" aria-live="polite">
+        Prêt à ouvrir ton premier paquet.
+      </div>
+
+      <section id="results" class="hidden">
+        <div class="section-head">
+          <h2 class="section-title">✨ Tes nouvelles cartes</h2>
         </div>
-
-        <button class="btn-action" id="btn-next-step" onclick="handleNextStep()">Révéler la carte</button>
-    </div>
-
-    <!-- RECAP -->
-    <div id="view-recap" class="main-container hidden">
-        <h1 class="title-main" style="font-size: 22px;">Paquet ouvert !</h1>
-        <div class="grid-cards" id="recap-grid" style="margin-bottom: 20px;"></div>
-        <button class="btn-action" onclick="switchTab('shop')">Terminer</button>
-    </div>
-
-    <!-- COLLECTION -->
-    <div id="view-collection" class="main-container hidden">
-        <h1 class="title-main" style="font-size: 22px;">Ma Collection</h1>
-        <div id="col-empty" style="color: var(--text-secondary); margin-top: 30px;">Aucune carte pour l'instant.</div>
-        <div class="grid-cards" id="collection-grid"></div>
-    </div>
-
-    <!-- NAVIGATION -->
-    <nav class="bottom-nav">
-        <button class="nav-item active" onclick="switchTab('shop')">
-            <span>🧩 Paquets</span>
+        <div id="newCards" class="cards"></div>
+        <button id="again" class="btn full" style="margin-top:16px">
+          Ouvrir un autre paquet
         </button>
-        <button class="nav-item" onclick="switchTab('collection')">
-            <span>📖 Collection</span>
+      </section>
+    </section>
+
+    <section id="library" class="hidden">
+      <h2 class="section-title">📚 Ma collection</h2>
+      <div class="toolbar">
+        <input id="search" type="search" placeholder="Rechercher une carte">
+        <select id="filter">
+          <option value="Toutes">Toutes les raretés</option>
+          <option value="Commune">Communes</option>
+          <option value="Rare">Rares</option>
+          <option value="Épique">Épiques</option>
+          <option value="Légendaire">Légendaires</option>
+          <option value="Mythique">Mythiques</option>
+        </select>
+      </div>
+
+      <div id="ownedCards" class="cards"></div>
+      <div id="empty" class="empty">
+        Ta collection est vide. Ouvre un paquet pour commencer !
+      </div>
+
+      <div style="display:grid;gap:10px;margin-top:20px">
+        <button id="export" class="btn secondary full">
+          Exporter ma sauvegarde
         </button>
-    </nav>
+        <button id="importButton" class="btn secondary full">
+          Importer une sauvegarde
+        </button>
+        <input id="importFile" type="file" accept=".json,application/json" class="hidden">
+      </div>
+    </section>
+  </main>
 
-    <script>
-        let collection = [];
-        let activePack = [];
-        let packIndex = 0;
-        let isFlipped = false;
+  <footer>
+    Articles et résumés fournis par Wikipédia.
+    Les raretés sont attribuées aléatoirement par le jeu.
+    <br>Les contenus Wikipédia sont soumis à leurs licences respectives.
+  </footer>
+</div>
 
-        const FALLBACK_IMG = "https://images.unsplash.com/photo-1532012197267-da84d127e765?w=400&q=80";
-        const SAFE_CARDS = [
-            { title: "La Joconde", desc: "Tableau de Léonard de Vinci conservé au Musée du Louvre.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/e/ec/Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg/400px-Mona_Lisa%2C_by_Leonardo_da_Vinci%2C_from_C2RMF_retouched.jpg", atk: 8500, def: 7200 },
-            { title: "Tour Eiffel", desc: "Tour de fer puddled de 330 mètres située à Paris.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/8/85/Tour_Eiffel_Wikimedia_Commons_%28cropped%29.jpg/400px-Tour_Eiffel_Wikimedia_Commons_%28cropped%29.jpg", atk: 6400, def: 8900 },
-            { title: "Système solaire", desc: "Système planétaire composé du Soleil et des objets en orbite.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cb/Planets2013.svg/500px-Planets2013.svg.png", atk: 9000, def: 9000 },
-            { title: "Napoléon Ier", desc: "Premier empereur des Français et général des guerres napoléoniennes.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Jacques-Louis_David_-_The_Emperor_Napoleon_in_His_Study_at_the_Tuileries_-_Google_Art_Project.jpg/400px-Jacques-Louis_David_-_The_Emperor_Napoleon_in_His_Study_at_the_Tuileries_-_Google_Art_Project.jpg", atk: 7800, def: 6500 },
-            { title: "Baleine bleue", desc: "Le plus grand animal vivant connu ayant jamais existé.", img: "https://upload.wikimedia.org/wikipedia/commons/thumb/1/1c/Blue_Whale_001_body_full.jpg/400px-Blue_Whale_001_body_full.jpg", atk: 9500, def: 8000 }
+<script>
+(() => {
+  "use strict";
+
+  const API = "https://fr.wikipedia.org/w/api.php";
+  const STORAGE_KEY = "wikimaster_complete_v1";
+
+  const rarityTable = [
+    { name: "Commune", weight: 60 },
+    { name: "Rare", weight: 25 },
+    { name: "Épique", weight: 10 },
+    { name: "Légendaire", weight: 4 },
+    { name: "Mythique", weight: 1 }
+  ];
+
+  const $ = id => document.getElementById(id);
+
+  let collection = {};
+  let packCount = 0;
+  let isOpening = false;
+
+  function loadSave(data) {
+    if (!data || typeof data !== "object") return;
+
+    if (data.collection && typeof data.collection === "object") {
+      collection = data.collection;
+    } else if (data.owned && typeof data.owned === "object") {
+      collection = data.owned;
+    }
+
+    packCount = Math.max(0, Number(data.packCount ?? data.packs) || 0);
+
+    // Vérification et nettoyage des données importées.
+    for (const [id, card] of Object.entries(collection)) {
+      if (!card || typeof card !== "object" || !card.title) {
+        delete collection[id];
+        continue;
+      }
+      card.count = Math.max(1, Number(card.count) || 1);
+    }
+  }
+
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) loadSave(JSON.parse(saved));
+  } catch (e) {
+    console.warn("La sauvegarde locale est indisponible.", e);
+  }
+
+  function save() {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({
+        collection,
+        packCount
+      }));
+    } catch (e) {
+      $("status").textContent =
+        "Attention : le navigateur n'a pas pu sauvegarder les données.";
+    }
+  }
+
+  function getRarity() {
+    let roll = Math.random() * 100;
+    for (const item of rarityTable) {
+      roll -= item.weight;
+      if (roll < 0) return item.name;
+    }
+    return "Commune";
+  }
+
+  function updateStats() {
+    const cards = Object.values(collection);
+    $("unique").textContent = cards.length;
+    $("total").textContent = cards.reduce(
+      (sum, card) => sum + (Number(card.count) || 0), 0
+    );
+    $("packs").textContent = packCount;
+  }
+
+  function createElement(tag, className, content) {
+    const element = document.createElement(tag);
+    if (className) element.className = className;
+    if (content !== undefined) element.textContent = content;
+    return element;
+  }
+
+  function renderCard(card, quantity) {
+    const article = createElement("article", "card r-" + card.rarity);
+
+    if (card.image) {
+      const img = createElement("img");
+      img.src = card.image;
+      img.alt = card.title;
+      img.loading = "lazy";
+      img.referrerPolicy = "no-referrer";
+      img.onerror = () => {
+        if (!img.isConnected) return;
+        img.replaceWith(createElement("div", "image-placeholder", "📖"));
+      };
+      article.appendChild(img);
+    } else {
+      article.appendChild(createElement("div", "image-placeholder", "📖"));
+    }
+
+    article.appendChild(createElement("h3", "", card.title));
+    article.appendChild(createElement("div", "rarity", card.rarity));
+    article.appendChild(createElement(
+      "p", "description",
+      card.description || "Aucune description disponible."
+    ));
+
+    if (quantity !== null) {
+      article.appendChild(createElement(
+        "div", "quantity", "Exemplaires : " + quantity
+      ));
+    }
+
+    const link = createElement("a", "wiki-link", "Lire l'article complet ↗");
+    link.href = card.url;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    article.appendChild(link);
+
+    return article;
+  }
+
+  async function fetchRandomArticles() {
+    const params = new URLSearchParams({
+      action: "query",
+      format: "json",
+      formatversion: "2",
+      origin: "*",
+      generator: "random",
+      grnnamespace: "0",
+      grnlimit: "20",
+      prop: "pageimages|extracts|info",
+      piprop: "thumbnail",
+      pithumbsize: "500",
+      exintro: "1",
+      explaintext: "1",
+      exsentences: "3",
+      inprop: "url"
+    });
+
+    const response = await fetch(API + "?" + params.toString(), {
+      headers: { "Accept": "application/json" }
+    });
+
+    if (!response.ok) {
+      throw new Error("Erreur réseau (" + response.status + ").");
+    }
+
+    const data = await response.json();
+
+    if (data.error) {
+      throw new Error(data.error.info || "Erreur de l'API Wikipédia.");
+    }
+
+    const pages = data.query && data.query.pages;
+    if (!Array.isArray(pages)) {
+      throw new Error("Aucun article reçu de Wikipédia.");
+    }
+
+    return pages
+      .filter(page => page.pageid && page.title && !page.missing)
+      .map(page => ({
+        id: String(page.pageid),
+        title: page.title,
+        image: page.thumbnail ? page.thumbnail.source : "",
+        description: (page.extract || "").trim().slice(0, 700),
+        url: page.fullurl ||
+          "https://fr.wikipedia.org/wiki/" +
+          encodeURIComponent(page.title.replace(/ /g, "_"))
+      }));
+  }
+
+  async function getFiveUniqueArticles() {
+    const cards = [];
+    const seen = new Set();
+
+    // Trois lots au maximum : les réponses peuvent contenir des doublons.
+    for (let attempt = 0; attempt < 3 && cards.length < 5; attempt++) {
+      const batch = await fetchRandomArticles();
+
+      for (const article of batch) {
+        if (seen.has(article.id)) continue;
+        seen.add(article.id);
+        cards.push(article);
+        if (cards.length === 5) break;
+      }
+    }
+
+    if (cards.length !== 5) {
+      throw new Error(
+        "Impossible de récupérer 5 articles différents. Réessaie."
+      );
+    }
+
+    return cards.map(card => ({
+      ...card,
+      rarity: getRarity()
+    }));
+  }
+
+  async function openPack() {
+    if (isOpening) return;
+
+    isOpening = true;
+    $("openPack").disabled = true;
+    $("again").disabled = true;
+    $("openPack").textContent = "RÉCUPÉRATION DES CARTES...";
+    $("status").textContent =
+      "Connexion à Wikipédia : récupération des articles, images et résumés...";
+
+    try {
+      const cards = await getFiveUniqueArticles();
+
+      for (const card of cards) {
+        if (collection[card.id]) {
+          const saved = collection[card.id];
+          saved.count = (Number(saved.count) || 0) + 1;
+          if (!saved.image && card.image) saved.image = card.image;
+          if (!saved.description && card.description) {
+            saved.description = card.description;
+          }
+        } else {
+          collection[card.id] = { ...card, count: 1 };
+        }
+      }
+
+      packCount++;
+      save();
+      updateStats();
+
+      $("newCards").replaceChildren(
+        ...cards.map(card => renderCard(card, null))
+      );
+
+      $("results").classList.remove("hidden");
+      $("status").textContent =
+        "Paquet ouvert ! 5 cartes ajoutées à ta collection.";
+
+      renderCollection();
+    } catch (error) {
+      console.error(error);
+      $("status").textContent =
+        "Erreur : " + (error.message || "connexion impossible") +
+        " Vérifie Internet et réessaie. Aucun paquet n'a été comptabilisé.";
+    } finally {
+      isOpening = false;
+      $("openPack").disabled = false;
+      $("again").disabled = false;
+      $("openPack").textContent = "OUVRIR UN PAQUET";
+    }
+  }
+
+  function renderCollection() {
+    const search = $("search").value.trim().toLocaleLowerCase("fr");
+    const filter = $("filter").value;
+
+    const cards = Object.values(collection)
+      .filter(card => card && card.title)
+      .filter(card => card.title.toLocaleLowerCase("fr").includes(search))
+      .filter(card => filter === "Toutes" || card.rarity === filter)
+      .sort((a, b) => {
+        const order = [
+          "Mythique", "Légendaire", "Épique", "Rare", "Commune"
         ];
+        return order.indexOf(a.rarity) - order.indexOf(b.rarity) ||
+          a.title.localeCompare(b.title, "fr");
+      });
 
-        let cardCache = [...SAFE_CARDS, ...SAFE_CARDS];
+    $("ownedCards").replaceChildren(
+      ...cards.map(card => renderCard(card, card.count))
+    );
 
-        function getRandomRarity() {
-            let r = Math.random() * 100;
-            if (r < 0.1) return { name: 'Légendaire', color: '#f59e0b' };
-            if (r < 1.5) return { name: 'Ultra Rare', color: '#ef4444' };
-            if (r < 6.5) return { name: 'Super Rare', color: '#a855f7' };
-            if (r < 20)  return { name: 'Rare', color: '#3b82f6' };
-            if (r < 45)  return { name: 'Peu Commune', color: '#22c55e' };
-            return { name: 'Commune', color: '#94a3b8' };
-        }
+    $("empty").classList.toggle("hidden", cards.length > 0);
+    $("empty").textContent = Object.keys(collection).length
+      ? "Aucune carte ne correspond à ta recherche."
+      : "Ta collection est vide. Ouvre un paquet pour commencer !";
 
-        function switchTab(tab) {
-            document.getElementById('view-shop').classList.add('hidden');
-            document.getElementById('view-pull').classList.add('hidden');
-            document.getElementById('view-recap').classList.add('hidden');
-            document.getElementById('view-collection').classList.add('hidden');
+    updateStats();
+  }
 
-            const navItems = document.querySelectorAll('.nav-item');
-            navItems.forEach(el => el.classList.remove('active'));
+  function showSection(section) {
+    $("shop").classList.toggle("hidden", section !== "shop");
+    $("library").classList.toggle("hidden", section !== "library");
+    $("shopTab").classList.toggle("secondary", section !== "shop");
+    $("collectionTab").classList.toggle("secondary", section !== "library");
 
-            if (tab === 'shop') {
-                document.getElementById('view-shop').classList.remove('hidden');
-                navItems[0].classList.add('active');
-            } else if (tab === 'collection') {
-                document.getElementById('view-collection').classList.remove('hidden');
-                navItems[1].classList.add('active');
-                renderCollection();
-            }
-        }
+    if (section === "library") renderCollection();
+  }
 
-        function openBoosterPack() {
-            activePack = [];
-            for (let i = 0; i < 5; i++) {
-                let template = cardCache[Math.floor(Math.random() * cardCache.length)];
-                activePack.push({
-                    ...template,
-                    rarity: getRandomRarity()
-                });
-            }
+  $("openPack").addEventListener("click", openPack);
+  $("again").addEventListener("click", openPack);
+  $("shopTab").addEventListener("click", () => showSection("shop"));
+  $("collectionTab").addEventListener("click", () => showSection("library"));
+  $("search").addEventListener("input", renderCollection);
+  $("filter").addEventListener("change", renderCollection);
 
-            packIndex = 0;
-            switchTab('pull');
-            loadCardInStage();
-        }
+  $("export").addEventListener("click", () => {
+    const blob = new Blob(
+      [JSON.stringify({ collection, packCount }, null, 2)],
+      { type: "application/json" }
+    );
 
-        function loadCardInStage() {
-            isFlipped = false;
-            document.getElementById('card-flipper').classList.remove('flipped');
-            document.getElementById('pull-progress').innerText = `Carte ${packIndex + 1} / 5`;
-            document.getElementById('btn-next-step').innerText = "Révéler la carte";
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "wikimaster-sauvegarde.json";
+    link.click();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+  });
 
-            let card = activePack[packIndex];
-            if (!collection.some(c => c.title === card.title)) {
-                collection.push(card);
-            }
+  $("importButton").addEventListener("click", () => $("importFile").click());
 
-            document.getElementById('c-title').innerText = card.title;
-            document.getElementById('c-desc').innerText = card.desc;
-            document.getElementById('c-img').src = card.img;
-            document.getElementById('c-atk').innerText = card.atk;
-            document.getElementById('c-def').innerText = card.def;
+  $("importFile").addEventListener("change", async event => {
+    const file = event.target.files[0];
+    if (!file) return;
 
-            let badge = document.getElementById('c-badge');
-            badge.innerText = card.rarity.name;
-            badge.style.background = card.rarity.color;
-            document.getElementById('card-front').style.borderColor = card.rarity.color;
-        }
+    try {
+      const data = JSON.parse(await file.text());
+      if (!data || typeof data !== "object" ||
+          (!data.collection && !data.owned)) {
+        throw new Error("Ce fichier ne contient pas une sauvegarde reconnue.");
+      }
 
-        function flipActiveCard() {
-            if (!isFlipped) {
-                isFlipped = true;
-                document.getElementById('card-flipper').classList.add('flipped');
-                document.getElementById('btn-next-step').innerText = packIndex < 4 ? "Carte Suivante ➔" : "Voir le récapitulatif";
-            }
-        }
+      if (!confirm("Remplacer ta collection actuelle par cette sauvegarde ?")) {
+        event.target.value = "";
+        return;
+      }
 
-        function handleNextStep() {
-            if (!isFlipped) {
-                flipActiveCard();
-            } else {
-                packIndex++;
-                if (packIndex < 5) {
-                    loadCardInStage();
-                } else {
-                    showRecap();
-                }
-            }
-        }
+      collection = {};
+      packCount = 0;
+      loadSave(data);
+      save();
+      renderCollection();
+      $("status").textContent = "Sauvegarde importée.";
+      showSection("library");
+    } catch (error) {
+      alert("Import impossible : " + error.message);
+    } finally {
+      event.target.value = "";
+    }
+  });
 
-  
+  updateStats();
+  renderCollection();
+  showSection("shop");
+})();
+</script>
+
+</body>
+</html>
